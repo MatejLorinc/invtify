@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$text: #08150e;
+$background: #f2fbf7;
+$primary: #00cc63;
+$secondary: #86edb8;
+$accent: #55f0a0;
+$primaryAccentGradient: linear-gradient(
+                120deg,
+                $primary,
+                $accent
+);
+
+@mixin text-gradient-effect {
+  background-color: $primary;
+  background-image: $primaryAccentGradient;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body {
+  background-color: $background;
+}
+
+.primary-text-effect {
+  @include text-gradient-effect;
+}
+
+
+@keyframes show-dynamic-letter {
+  0% {
+    opacity: 0;
+    transform: translateZ(-20px) rotateX(90deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateZ(-20px) rotateX(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(-20px) rotateX(0);
+  }
+}
+
+.dynamic-text {
+  .dynamic-letter {
+    opacity: 0;
+    transform: translateZ(-20px) rotateX(90deg);
+    transform-style: preserve-3d;
+    display: inline-block;
+    animation-name: show-dynamic-letter;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+
+    @include text-gradient-effect;
+  }
+}
+
+.tooltip-left::after {
+  content: "";
+  opacity: 0.75;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent black;
+}
+
+.tooltip-right::after {
+  content: "";
+  opacity: 0.75;
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
