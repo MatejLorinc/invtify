@@ -9,7 +9,7 @@ export default function Home() {
         <div>
             <Navbar items={[
                 {name: "About", href: "#about"},
-                {name: "Strategies", href: "#strategies"},
+                {name: "Our Strategies", href: "#strategies"},
                 {name: "Brokers & Exchanges", href: "#brokers"}
             ]}/>
             <Hero/>

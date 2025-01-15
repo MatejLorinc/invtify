@@ -21,7 +21,7 @@ public class InvestmentController {
     @GetMapping
     public ResponseEntity<InvestmentsDto> getInvestments(@AuthenticationPrincipal Jwt principal) {
         String userId = principal.getSubject();
-        Collection<InvestmentModel> investments = investmentService.getInvestments(userId);
+        Collection<InvestmentModel> investments = investmentService.getInvestments(userId); // null
         InvestmentsDto investmentsDto = InvestmentsDto.builder()
                 .investments(investments)
                 .build();

@@ -1,8 +1,8 @@
 package com.invtify.backend.service;
 
 import com.invtify.backend.model.UserModel;
+import com.invtify.backend.model.broker.Broker;
 import com.invtify.backend.model.token.TokenModel;
-import com.invtify.backend.model.token.TokenProvider;
 import com.invtify.backend.persistance.entity.Token;
 import com.invtify.backend.persistance.entity.User;
 import com.invtify.backend.persistance.repository.TokenRepository;
@@ -24,7 +24,7 @@ public class TokenService {
 
     public void setToken(String userId, TokenModel tokenModel) {
         User user = userService.getUser(userId);
-        TokenProvider provider = tokenModel.getProvider();
+        Broker provider = tokenModel.getProvider();
 
         tokenRepository.findByUserAndProvider(user, provider).ifPresentOrElse(token -> {
             token.setToken(tokenModel.getToken());

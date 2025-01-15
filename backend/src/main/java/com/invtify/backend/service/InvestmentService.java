@@ -13,7 +13,7 @@ import java.util.Collection;
 @Service
 @RequiredArgsConstructor
 public class InvestmentService {
-    private final InvestmentRepository tokenRepository;
+    private final InvestmentRepository investmentRepository;
     private final UserService userService;
 
     public Collection<InvestmentModel> getInvestments(String userId) {
@@ -41,12 +41,13 @@ public class InvestmentService {
     public void editInvestment(User user, Investment investment, InvestmentModel investmentModel) {
         investment.setUser(user);
         investment.setId(investmentModel.getUniqueId());
+        investment.setAsset(investmentModel.getAsset());
         investment.setStrategy(investmentModel.getStrategy());
         investment.setProvider(investmentModel.getProvider());
         investment.setFrequencyType(investmentModel.getFrequency().type());
         investment.setFrequencyDay(investmentModel.getFrequency().day());
         investment.setFrequencyHour(investmentModel.getFrequency().hour());
         investment.setAmount(investment.getAmount());
-        tokenRepository.save(user);
+        investmentRepository.save(user);
     }
 }

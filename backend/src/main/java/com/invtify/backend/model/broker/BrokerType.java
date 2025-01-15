@@ -1,11 +1,11 @@
-package com.invtify.backend.model.token;
+package com.invtify.backend.model.broker;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum TokenProviderType {
+public enum BrokerType {
     EXCHANGE("Exchange"),
     BROKER("Broker");
 

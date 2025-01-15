@@ -1,6 +1,6 @@
 package com.invtify.backend.persistance.entity;
 
-import com.invtify.backend.model.token.TokenProvider;
+import com.invtify.backend.model.broker.Broker;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,11 +13,21 @@ public class Token {
     private long id;
 
     @Column(nullable = false)
-    private TokenProvider provider;
+    private Broker provider;
 
     @Column(nullable = false)
     private String token;
 
     @ManyToOne
     private User user;
+
+    @Override
+    public String toString() {
+        return "Token{" +
+                "id=" + id +
+                ", provider=" + provider +
+                ", token='" + token + '\'' +
+                ", user=" + user.getId() +
+                '}';
+    }
 }
