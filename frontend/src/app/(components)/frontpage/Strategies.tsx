@@ -3,7 +3,7 @@ export default function Strategies() {
         <section className="bg-white" id="strategies">
             <div className="py-16 px-4 mx-auto max-w-screen-xl">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold mb-4 text-gray-900">Our Strategies</h1>
+                    <h1 className="text-4xl font-bold mb-4 text-gray-900">Strategies</h1>
 
                     <div className="text-gray-700 max-w-4xl mx-auto text-lg">
                         <p>
