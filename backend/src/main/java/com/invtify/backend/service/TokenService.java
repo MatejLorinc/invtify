@@ -24,15 +24,15 @@ public class TokenService {
 
     public void setToken(String userId, TokenModel tokenModel) {
         User user = userService.getUser(userId);
-        Broker provider = tokenModel.getProvider();
+        Broker broker = tokenModel.getBroker();
 
-        tokenRepository.findByUserAndProvider(user, provider).ifPresentOrElse(token -> {
+        tokenRepository.findByUserAndBroker(user, broker).ifPresentOrElse(token -> {
             token.setToken(tokenModel.getToken());
             tokenRepository.save(token);
         }, () -> {
             Token token = new Token();
             token.setUser(user);
-            token.setProvider(provider);
+            token.setBroker(broker);
             token.setToken(tokenModel.getToken());
             tokenRepository.save(token);
         });

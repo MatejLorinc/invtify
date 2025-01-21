@@ -41,7 +41,7 @@ public class UserService {
     private HashMap<Broker, TokenModel> getTokenModelsMap(User user) {
         return user.getTokens().stream()
                 .map(TokenModel::create)
-                .collect(Collectors.toMap(TokenModel::getProvider, tokenModel -> tokenModel, (prev, next) -> next, HashMap::new));
+                .collect(Collectors.toMap(TokenModel::getBroker, tokenModel -> tokenModel, (prev, next) -> next, HashMap::new));
     }
 
     private List<InvestmentModel> getInvestmentModels(User user) {

@@ -1,28 +1,25 @@
 package com.invtify.backend.persistance.entity;
 
-import com.invtify.backend.model.broker.Broker;
 import com.invtify.backend.model.investment.FrequencyType;
 import com.invtify.backend.model.investment.InvestmentStrategy;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.UUID;
+import java.sql.Date;
 
 @Data
 @Entity
 @Table(name = "investments")
 public class Investment {
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @ManyToOne
     private InvestmentAsset asset;
 
     @Column(nullable = false)
     private InvestmentStrategy strategy;
-
-    @Column(nullable = false)
-    private Broker provider;
 
     @Column(name = "frequency_type", nullable = false)
     private FrequencyType frequencyType;
@@ -39,18 +36,21 @@ public class Investment {
     @ManyToOne
     private User user;
 
+    @Column(nullable = false)
+    private Date createdAt;
+
     @Override
     public String toString() {
         return "Investment{" +
                 "id=" + id +
                 ", asset=" + asset +
                 ", strategy=" + strategy +
-                ", provider=" + provider +
                 ", frequencyType=" + frequencyType +
                 ", frequencyDay=" + frequencyDay +
                 ", frequencyHour=" + frequencyHour +
                 ", amount=" + amount +
                 ", user=" + user.getId() +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

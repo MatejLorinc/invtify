@@ -6,9 +6,7 @@ export const dynamic = "force-dynamic",
     revalidate = 0;
 
 export default async function Investments({accessToken}: { accessToken: string }) {
-    // TODO: Get investment data
     const investments = await getInvestments(accessToken);
-    console.log(investments)
 
     return <div className="flex flex-col gap-4">
         <h1 className="mx-auto text-lg font-semibold">Active Investments</h1>

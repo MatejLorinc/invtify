@@ -43,7 +43,6 @@ public class InvestmentService {
         investment.setId(investmentModel.getUniqueId());
         investment.setAsset(investmentModel.getAsset());
         investment.setStrategy(investmentModel.getStrategy());
-        investment.setProvider(investmentModel.getProvider());
         investment.setFrequencyType(investmentModel.getFrequency().type());
         investment.setFrequencyDay(investmentModel.getFrequency().day());
         investment.setFrequencyHour(investmentModel.getFrequency().hour());

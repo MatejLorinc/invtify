@@ -13,7 +13,7 @@ public class Token {
     private long id;
 
     @Column(nullable = false)
-    private Broker provider;
+    private Broker broker;
 
     @Column(nullable = false)
     private String token;
@@ -25,7 +25,7 @@ public class Token {
     public String toString() {
         return "Token{" +
                 "id=" + id +
-                ", provider=" + provider +
+                ", broker=" + broker +
                 ", token='" + token + '\'' +
                 ", user=" + user.getId() +
                 '}';

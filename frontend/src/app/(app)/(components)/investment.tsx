@@ -3,45 +3,43 @@ import {FaArrowRight} from "react-icons/fa6";
 import {RiExchangeFundsFill} from "react-icons/ri";
 import InvestmentChart from "@/app/(app)/(components)/investment-chart";
 import {ReactElement} from "react";
-import {InvestmentModel} from "@/app/(models)/investment";
+import {InvestmentModel} from "@/app/(models)/investment/investment";
 
 export default function Investment({id, investmentModel}: { id: number, investmentModel: InvestmentModel }) {
-    // TODO: Display investment data
-
     return <div className="basis-1/3 flex-grow min-w-80 rounded shadow-lg">
-        <InvestmentHeader/>
+        <InvestmentHeader id={id} investmentModel={investmentModel}/>
         <div className="flex gap-2 m-2 flex-wrap">
             <InvestmentValue id={id}/>
-            <InvestmentInfoComponent header="Strategy" info="DCA - Market" icon={<RiExchangeFundsFill size="2rem"/>}/>
-            <InvestmentInfoComponent header="Exchange" info="Binance"
+            <InvestmentInfoComponent header="Strategy" info={investmentModel.strategy.displayName} icon={<RiExchangeFundsFill size="2rem"/>}/>
+            <InvestmentInfoComponent header="Exchange" info={investmentModel.asset.broker.displayName}
                                      icon={<Image src="/assets/icons/broker.png" alt="broker" width={32}
                                                   height={32}/>}/>
-            <InvestmentInfoComponent header="Frequency" info="Every Monday at 8:00"
+            <InvestmentInfoComponent header="Frequency" info={investmentModel.getFrequencyDatetime()}
                                      icon={<Image src="/assets/icons/calendar.svg" alt="calendar" width={32}
                                                   height={32}/>}/>
-            <InvestmentInfoComponent header="Purchase worth" info="100,00 €"
+            <InvestmentInfoComponent header="Purchase worth" info={investmentModel.getCurrencyAmount()}
                                      icon={<Image src="/assets/icons/coins-swap.svg" alt="coins-swap" width={32}
                                                   height={32}/>}/>
         </div>
     </div>;
 }
 
-function InvestmentHeader() {
+function InvestmentHeader({id, investmentModel}: { id: number, investmentModel: InvestmentModel }) {
     return <div className="flex items-center justify-between p-4 rounded-t bg-black/5">
         <div className="flex gap-4">
-            <Image src="/assets/icons/bitcoin.svg" alt="bitcoin" width={32} height={32}/>
+            <Image src={"/assets/icons/" + investmentModel.asset.icon} alt={investmentModel.asset.asset} width={32} height={32}/>
             <div>
                 <div className="font-medium flex items-center gap-1">
-                    <p>EUR</p>
+                    <p>{investmentModel.asset.currency}</p>
                     <FaArrowRight/>
-                    <p>BTC</p>
+                    <p>{investmentModel.asset.asset}</p>
                 </div>
                 <p className="text-sm overflow-hidden max-w-40">Description</p>
             </div>
         </div>
         <div className="text-sm text-right">
             <p className="">Created</p>
-            <p className="font-medium">27.5.2024</p>
+            <p className="font-medium">{investmentModel.createdAt.toLocaleDateString()}</p>
         </div>
     </div>;
 }
