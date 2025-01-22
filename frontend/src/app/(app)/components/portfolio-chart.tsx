@@ -1,7 +1,7 @@
 "use client"
 
 import {useEffect, useRef, useState} from "react";
-import {LineChart} from "@/app/(app)/(components)/chart";
+import {LineChart} from "@/app/(app)/components/chart";
 
 export default function PortfolioChart() {
     const chartContainer = useRef(null);

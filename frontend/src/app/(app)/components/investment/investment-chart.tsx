@@ -1,7 +1,7 @@
 "use client"
 
 import {useEffect, useRef, useState} from "react";
-import {LineChart} from "@/app/(app)/(components)/chart";
+import {LineChart} from "@/app/(app)/components/chart";
 import * as d3 from "d3";
 
 export default function InvestmentChart({id}: { id: number }) {
@@ -58,7 +58,8 @@ export default function InvestmentChart({id}: { id: number }) {
 
                        return <>
                            <defs>
-                               <linearGradient id={gradientId} x1="0" x2="0" y1={yProvider(d3.min(data, d => d.value) as number)} y2={yProvider(d3.max(data, d => d.value) as number) - 100}
+                               <linearGradient id={gradientId} x1="0" x2="0" y1={yProvider(d3.min(data, d => d.value) as number)}
+                                               y2={yProvider(d3.max(data, d => d.value) as number) - 100}
                                                gradientUnits="userSpaceOnUse">
                                    {stops.map((stop, index) => (
                                        <stop key={index} offset={stop.offset} stopColor={stop.color}/>

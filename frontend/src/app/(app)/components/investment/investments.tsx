@@ -1,5 +1,5 @@
 import {FaPlus} from "react-icons/fa6";
-import Investment from "@/app/(app)/(components)/investment";
+import Investment from "@/app/(app)/components/investment/investment";
 import {getInvestments} from "@/app/(services)/investment.service";
 
 export const dynamic = "force-dynamic",

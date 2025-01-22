@@ -1,6 +1,6 @@
 "use client"
 
-import PortfolioChart from "@/app/(app)/(components)/portfolio-chart";
+import PortfolioChart from "@/app/(app)/components/portfolio-chart";
 import {useState} from "react";
 
 const timeframes = [

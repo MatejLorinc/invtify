@@ -1,9 +1,9 @@
 import Image from "next/image";
 import {FaArrowRight} from "react-icons/fa6";
 import {RiExchangeFundsFill} from "react-icons/ri";
-import InvestmentChart from "@/app/(app)/(components)/investment-chart";
-import {ReactElement} from "react";
+import InvestmentChart from "@/app/(app)/components/investment/investment-chart";
 import {InvestmentModel} from "@/app/(models)/investment/investment";
+import {InvestmentInfoComponent} from "@/app/(app)/components/investment/investment-info";
 
 export default function Investment({id, investmentModel}: { id: number, investmentModel: InvestmentModel }) {
     return <div className="basis-1/3 flex-grow min-w-80 rounded shadow-lg">
@@ -73,17 +73,5 @@ function InvestmentGain({id}: { id: number }) {
             <p className="font-medium text-xl">+ 4845,67 €</p>
         </div>
         <InvestmentChart id={id}/>
-    </div>;
-}
-
-function InvestmentInfoComponent({header, info, icon}: { header: string, info: string, icon: ReactElement }) {
-    return <div className="flex basis-0 flex-grow min-w-64 rounded p-2 px-4 bg-black/5 justify-between items-center">
-        <div>
-            <p className="font-medium">{header}</p>
-            <p className="text-sm">{info}</p>
-        </div>
-        <div className="opacity-75 my-2">
-            {icon}
-        </div>
     </div>;
 }

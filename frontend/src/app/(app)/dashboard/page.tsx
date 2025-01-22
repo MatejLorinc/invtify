@@ -1,6 +1,6 @@
 import {getSession, Session, withPageAuthRequired} from '@auth0/nextjs-auth0';
-import Investments from "@/app/(app)/(components)/investments";
-import Portfolio from "@/app/(app)/(components)/portfolio";
+import Investments from "@/app/(app)/components/investment/investments";
+import Portfolio from "@/app/(app)/components/portfolio";
 
 export default withPageAuthRequired(async function Dashboard() {
     const session = await getSession() as Session;
