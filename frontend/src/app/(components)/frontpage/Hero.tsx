@@ -46,7 +46,7 @@ export default function Hero() {
                             >
                                 Sign Up for Free
                             </a>
-                            <a href="#"
+                            <a href="#about"
                                className="text-sm font-semibold leading-6 text-gray-900 transition hover:text-primary-400 duration-300">
                                 Learn more <span aria-hidden="true">→</span>
                             </a>
