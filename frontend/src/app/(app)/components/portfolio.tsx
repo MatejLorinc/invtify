@@ -21,14 +21,22 @@ const timeframes = [
     }
 ]
 
+function PortfolioInfoComponent({title, value, additionalValue}: { title: string, value: string, additionalValue: string }) {
+    return <div className="flex w-48 rounded p-2 px-4 flex-col gap-0.5 text-center">
+        <h2 className="text-sm text-gray-500">{title}</h2>
+        <p className="text-xl font-medium">{value}</p>
+        <p className="text-sm">{additionalValue}</p>
+    </div>;
+}
+
 export default function Portfolio() {
     const [activeTimeframe, setActiveTimeframe] = useState(timeframes[timeframes.length - 1]);
 
-    return <div className="bg-gradient-to-t from-primary-400/25 rounded overflow-hidden shadow-lg">
-        <div className="flex flex-col gap-0.5 px-6 py-4">
-            <h2 className="text-sm text-gray-500">Current Balance</h2>
-            <p className="text-xl font-medium">12 345,67 €</p>
-            <p className="text-sm text-gray-500">+4845,67 € (+64,61%)</p>
+    return <div className="bg-background-default rounded overflow-hidden shadow-lg">
+        <div className="flex flex-wrap gap-2 justify-around">
+            <PortfolioInfoComponent title="Current Balance" value="12 345,67 €" additionalValue="Cash: 1000,00 €"/>
+            <PortfolioInfoComponent title="Total Return" value="+64,61%" additionalValue="+4845,67 €"/>
+            <PortfolioInfoComponent title="Year to Date Return" value="+64,61%" additionalValue="+4845,67 €"/>
         </div>
         <PortfolioChart/>
         <div className="bg-background-default">
@@ -39,7 +47,7 @@ export default function Portfolio() {
                                                                        setActive={() => setActiveTimeframe(timeframes[index])}/>)}
             </div>
         </div>
-        {/*<h2>Uninvested Balance</h2>*/}
+        {/*<h2>Cash Holdings</h2>*/}
         {/*<p>1 234,56 €</p>*/}
         {/*<h2>Total Balance</h2>*/}
         {/*<p>13 580,23 €</p>*/}

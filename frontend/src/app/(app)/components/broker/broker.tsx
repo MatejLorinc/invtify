@@ -28,7 +28,7 @@ function BrokerHeader({id}: { id: number }) {
 }
 
 function BrokerUsedBalance() {
-    return <div className="flex gap-2">
+    return <div className="flex flex-wrap gap-2">
         <BrokerBalanceComponent header="Total Balance" info={"10 000,00 €"}
                                 icon={<Image src="/assets/icons/coins-black.svg" alt="broker" width={24} height={24}/>
                                 }/>
@@ -51,7 +51,7 @@ function BrokerBalanceComponent({header, info, icon}: { header: string, info: st
 }
 
 function BrokerAvailableBalance() {
-    return <div className="flex bg-black/5">
+    return <div className="flex flex-wrap bg-black/5">
         <BrokerAvailableBalanceComponent header="Available Balance" info={"1 000,00 €"} icon={<HiOutlineCash size="2rem"/>}/>
         <BrokerAvailableBalanceComponent header="Runs Out In" info={"2 months 4 weeks 3 days"} icon={<RiHourglassFill size="2rem"/>}/>
     </div>

@@ -53,7 +53,7 @@ export default function InvestmentChart({id}: { id: number }) {
                        const color = "#00cc63";
                        const stops = [
                            {offset: '0%', color: `${color}00`},
-                           {offset: '100%', color: `${color}ff`}
+                           {offset: '100%', color: `${color}55`}
                        ];
 
                        return <>
