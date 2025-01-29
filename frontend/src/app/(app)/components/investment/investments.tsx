@@ -14,6 +14,7 @@ export default async function Investments({accessToken}: { accessToken: string }
             {investments.map((investment, index) =>
                 <Investment key={index} investmentModel={investment} id={index}/>
             )}
+            {investments.length % 2 == 1 ? <div className="basis-1/3 flex-grow min-w-80"/> : ""}
             <AddInvestmentComponent/>
         </div>
     </div>;
