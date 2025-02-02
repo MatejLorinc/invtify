@@ -1,6 +1,5 @@
 package com.invtify.backend.service;
 
-import com.invtify.backend.model.UserModel;
 import com.invtify.backend.model.investment.InvestmentModel;
 import com.invtify.backend.persistance.entity.Investment;
 import com.invtify.backend.persistance.entity.User;
@@ -17,8 +16,8 @@ public class InvestmentService {
     private final UserService userService;
 
     public Collection<InvestmentModel> getInvestments(String userId) {
-        UserModel user = userService.getUserModel(userId);
-        return user.getInvestments();
+        User user = userService.getUser(userId);
+        return user.getInvestments().stream().map(InvestmentModel::create).toList();
     }
 
     public void setInvestment(String userId, InvestmentModel investmentModel) {

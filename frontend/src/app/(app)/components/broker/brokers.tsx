@@ -1,11 +1,11 @@
-import {getInvestments} from "@/app/(services)/investment.service";
 import Broker from "@/app/(app)/components/broker/broker";
+import {getBrokers} from "@/app/(services)/broker.service";
 
 export const dynamic = "force-dynamic",
     revalidate = 0;
 
 export default async function Brokers({accessToken}: { accessToken: string }) {
-    const brokers = await getInvestments(accessToken); //TODO get brokers
+    const brokers = await getBrokers(accessToken); //TODO get brokers
 
     return <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">

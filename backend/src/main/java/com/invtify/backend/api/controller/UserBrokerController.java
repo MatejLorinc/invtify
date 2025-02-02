@@ -1,7 +1,9 @@
 package com.invtify.backend.api.controller;
 
-import com.invtify.backend.api.dto.TokensDto;
-import com.invtify.backend.model.token.TokenModel;
+import com.invtify.backend.api.dto.BrokersDto;
+import com.invtify.backend.model.broker.BrokerModel;
+import com.invtify.backend.model.broker.TokenModel;
+import com.invtify.backend.service.BrokerService;
 import com.invtify.backend.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,23 +15,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping(path = "/api/user/token")
+@RequestMapping(path = "/api/user/broker")
 @RequiredArgsConstructor
-public class UserTokenController {
+public class UserBrokerController {
     private final TokenService tokenService;
+    private final BrokerService brokerService;
 
     @GetMapping
-    public ResponseEntity<TokensDto> getTokens(@AuthenticationPrincipal Jwt principal) {
+    public ResponseEntity<BrokersDto> getBrokers(@AuthenticationPrincipal Jwt principal) {
         String userId = principal.getSubject();
-        Collection<TokenModel> tokens = tokenService.getTokens(userId);
-        TokensDto tokensDto = TokensDto.builder()
+        Collection<BrokerModel> tokens = brokerService.getBrokers(userId);
+        BrokersDto brokersDto = BrokersDto.builder()
                 .tokens(tokens)
                 .build();
-        return ResponseEntity.ok(tokensDto);
+        return ResponseEntity.ok(brokersDto);
     }
 
     @PostMapping
-    public ResponseEntity<TokenModel> setToken(@AuthenticationPrincipal Jwt principal, @RequestBody TokenModel token) {
+    public ResponseEntity<TokenModel> setBroker(@AuthenticationPrincipal Jwt principal, @RequestBody TokenModel token) {
         String userId = principal.getSubject();
         tokenService.setToken(userId, token);
         return new ResponseEntity<>(token, HttpStatus.CREATED);

@@ -1,16 +1,17 @@
-import {InvestmentModel, InvestmentsDto} from "@/app/(models)/investment/investment";
+import {InvestmentModel} from "@/app/(models)/investment/investment";
 import {getExternalApiWithAuth, postExternalApiWithAuth} from "@/app/(services)/external-api.service";
 import InvestmentStrategy from "@/app/(models)/investment/investment-strategy";
 import InvestmentFrequency, {FrequencyType} from "@/app/(models)/investment/investment-frequency";
-import InvestmentBroker from "@/app/(models)/broker/investment-broker";
+import InvestmentBroker, {BrokersDto} from "@/app/(models)/broker/investment-broker";
 
-export async function createInvestment(accessToken: string, investment: InvestmentModel) {
-    await postExternalApiWithAuth("api/user/investments", accessToken, investment);
+export async function updateBroker(accessToken: string, investment: InvestmentModel) {
+    await postExternalApiWithAuth("api/user/broker", accessToken, investment);
 }
 
-export async function getInvestments(accessToken: string) {
-    const response = await getExternalApiWithAuth("api/user/investments", accessToken);
-    const data: InvestmentsDto = await response.json() as InvestmentsDto;
+export async function getBrokers(accessToken: string) {
+    const response = await getExternalApiWithAuth("api/user/broker", accessToken);
+    const data: BrokersDto = await response.json() as BrokersDto;
+    console.log(data)
     return data.investments.map((investmentData) =>
         new InvestmentModel(InvestmentStrategy.fromName(investmentData.strategy),
             new InvestmentFrequency(FrequencyType.fromName(investmentData.frequency.type),

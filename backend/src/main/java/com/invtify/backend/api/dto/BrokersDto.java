@@ -1,6 +1,6 @@
 package com.invtify.backend.api.dto;
 
-import com.invtify.backend.model.token.TokenModel;
+import com.invtify.backend.model.broker.BrokerModel;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +8,6 @@ import java.util.Collection;
 
 @Builder
 @Getter
-public class TokensDto {
-    private Collection<TokenModel> tokens;
+public class BrokersDto {
+    private Collection<BrokerModel> tokens;
 }

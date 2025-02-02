@@ -5,6 +5,7 @@ export function formatCurrency(value: number) {
     });
 }
 
+
 export function formatDate(date: Date) {
     return date.toLocaleString("sk", {
         month: "short",

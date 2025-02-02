@@ -1,8 +1,6 @@
 package com.invtify.backend.service;
 
-import com.invtify.backend.model.UserModel;
-import com.invtify.backend.model.broker.Broker;
-import com.invtify.backend.model.token.TokenModel;
+import com.invtify.backend.model.broker.TokenModel;
 import com.invtify.backend.persistance.entity.Token;
 import com.invtify.backend.persistance.entity.User;
 import com.invtify.backend.persistance.repository.TokenRepository;
@@ -17,22 +15,25 @@ public class TokenService {
     private final TokenRepository tokenRepository;
     private final UserService userService;
 
-    public Collection<TokenModel> getTokens(String userId) {
-        UserModel user = userService.getUserModel(userId);
-        return user.getTokens().values();
+    public Collection<Token> getTokens(String userId) {
+        User user = userService.getUser(userId);
+        return user.getTokens();
+    }
+
+    public Collection<TokenModel> getTokenModels(String userId) {
+        return getTokens(userId).stream().map(TokenModel::create).toList();
     }
 
     public void setToken(String userId, TokenModel tokenModel) {
         User user = userService.getUser(userId);
-        Broker broker = tokenModel.getBroker();
 
-        tokenRepository.findByUserAndBroker(user, broker).ifPresentOrElse(token -> {
+        tokenRepository.findByUserAndBroker(user, tokenModel.getBroker()).ifPresentOrElse(token -> {
             token.setToken(tokenModel.getToken());
             tokenRepository.save(token);
         }, () -> {
             Token token = new Token();
             token.setUser(user);
-            token.setBroker(broker);
+            token.setBroker(tokenModel.getBroker());
             token.setToken(tokenModel.getToken());
             tokenRepository.save(token);
         });

@@ -1,6 +1,6 @@
 import InvestmentFrequency from "@/app/(models)/investment/investment-frequency";
 import InvestmentStrategy from "@/app/(models)/investment/investment-strategy";
-import InvestmentBroker from "@/app/(models)/investment/investment-broker";
+import InvestmentBroker from "@/app/(models)/broker/investment-broker";
 
 export class InvestmentModel {
     constructor(

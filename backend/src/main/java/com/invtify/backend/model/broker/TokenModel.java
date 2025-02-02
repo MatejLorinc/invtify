@@ -1,6 +1,5 @@
-package com.invtify.backend.model.token;
+package com.invtify.backend.model.broker;
 
-import com.invtify.backend.model.broker.Broker;
 import com.invtify.backend.persistance.entity.Token;
 import lombok.Builder;
 import lombok.Getter;
