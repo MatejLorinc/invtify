@@ -1,8 +1,11 @@
 export default class InvestmentBroker {
-    static readonly TRADING_212 = new InvestmentBroker("TRADING_212", "Trading 212");
+    static readonly TRADING_212 = new InvestmentBroker("TRADING_212", "trading212.png", "Trading 212");
+    static readonly XTB = new InvestmentBroker("XTB", "xtb.png", "XTB");
+    static readonly BINANCE = new InvestmentBroker("BINANCE", "binance.png", "Binance");
 
     private constructor(
         public readonly name: string,
+        public readonly icon: string,
         public readonly displayName: string
     ) {
     }
@@ -13,6 +16,8 @@ export default class InvestmentBroker {
         if (!this._values) {
             this._values = {}
             this.addValue(InvestmentBroker.TRADING_212);
+            this.addValue(InvestmentBroker.XTB);
+            this.addValue(InvestmentBroker.BINANCE);
         }
         return this._values;
     }
@@ -38,14 +43,14 @@ export class BrokerModel {
         public totalBalance: number,
         public investedBalance: number,
         public availableBalance: number,
-        public remainingDurationDays: number
+        public reservesLifetimeDays: number
     ) {
     }
 
-    getRemainingDuration(): string {
-        const months = this.remainingDurationDays / 30
-        const weeks = this.remainingDurationDays / 7 % 30
-        const days = this.remainingDurationDays % 7
+    getReservesLifetime(): string {
+        const months = this.reservesLifetimeDays / 30
+        const weeks = this.reservesLifetimeDays / 7 % 30
+        const days = this.reservesLifetimeDays % 7
 
         let durationText = ""
         if (months > 0) {
@@ -56,6 +61,9 @@ export class BrokerModel {
         }
         if (days > 0) {
             durationText += days + " day" + (days > 1 ? "s" : "")
+        }
+        if (this.reservesLifetimeDays <= 0) {
+            durationText = "No balance available"
         }
 
         return durationText
@@ -68,22 +76,16 @@ export interface TokenModel {
 }
 
 export interface BrokersDto {
-    investments: [
+    brokers: [
         {
-            strategy: string,
-            frequency: {
-                type: string,
-                day: number,
-                hour: number
+            tokenModel: {
+                broker: string,
+                token: string
             },
-            amount: number,
-            asset: {
-                asset: string,
-                currency: string,
-                broker: string
-                icon: string
-            },
-            createdAt: string
+            totalBalance: number,
+            investedBalance: number,
+            availableBalance: number,
+            reservesLifetimeDays: number,
         }
     ]
 }

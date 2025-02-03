@@ -1,8 +1,6 @@
 import {InvestmentModel} from "@/app/(models)/investment/investment";
 import {getExternalApiWithAuth, postExternalApiWithAuth} from "@/app/(services)/external-api.service";
-import InvestmentStrategy from "@/app/(models)/investment/investment-strategy";
-import InvestmentFrequency, {FrequencyType} from "@/app/(models)/investment/investment-frequency";
-import InvestmentBroker, {BrokersDto} from "@/app/(models)/broker/investment-broker";
+import InvestmentBroker, {BrokerModel, BrokersDto} from "@/app/(models)/broker/investment-broker";
 
 export async function updateBroker(accessToken: string, investment: InvestmentModel) {
     await postExternalApiWithAuth("api/user/broker", accessToken, investment);
@@ -11,18 +9,14 @@ export async function updateBroker(accessToken: string, investment: InvestmentMo
 export async function getBrokers(accessToken: string) {
     const response = await getExternalApiWithAuth("api/user/broker", accessToken);
     const data: BrokersDto = await response.json() as BrokersDto;
-    console.log(data)
-    return data.investments.map((investmentData) =>
-        new InvestmentModel(InvestmentStrategy.fromName(investmentData.strategy),
-            new InvestmentFrequency(FrequencyType.fromName(investmentData.frequency.type),
-                investmentData.frequency.day,
-                investmentData.frequency.hour),
-            {
-                ...investmentData.asset,
-                broker: InvestmentBroker.fromName(investmentData.asset.broker)
+    return data.brokers.map((brokerData) =>
+        new BrokerModel({
+                broker: InvestmentBroker.fromName(brokerData.tokenModel.broker),
+                token: brokerData.tokenModel.token
             },
-            investmentData.amount,
-            new Date(investmentData.createdAt)
-        )
+            brokerData.totalBalance,
+            brokerData.investedBalance,
+            brokerData.availableBalance,
+            brokerData.reservesLifetimeDays)
     );
 }

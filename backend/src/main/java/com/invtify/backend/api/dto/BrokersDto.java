@@ -9,5 +9,5 @@ import java.util.Collection;
 @Builder
 @Getter
 public class BrokersDto {
-    private Collection<BrokerModel> tokens;
+    private Collection<BrokerModel> brokers;
 }

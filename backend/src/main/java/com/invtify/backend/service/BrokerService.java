@@ -5,7 +5,6 @@ import com.invtify.backend.model.broker.TokenModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.Collection;
 
 @Service
@@ -23,7 +22,7 @@ public class BrokerService {
                 .availableBalance(0)
                 .investedBalance(0)
                 .totalBalance(0)
-                .remainingDuration(Duration.ZERO)
+                .reservesLifetimeDays(0)
                 .build();
     }
 }

@@ -13,7 +13,9 @@ export default async function Brokers({accessToken}: { accessToken: string }) {
             <AddBroker/>
         </div>
         <div className="flex flex-wrap gap-4">
-            <Broker id={0}/>
+            {brokers.map((broker, index) =>
+                <Broker key={index} brokerModel={broker} id={index}/>
+            )}
             {brokers.length % 2 == 1 ? <div className="basis-1/3 flex-grow min-w-80"/> : ""}
         </div>
     </div>;

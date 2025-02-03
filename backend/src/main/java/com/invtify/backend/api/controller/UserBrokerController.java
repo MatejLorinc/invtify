@@ -24,9 +24,9 @@ public class UserBrokerController {
     @GetMapping
     public ResponseEntity<BrokersDto> getBrokers(@AuthenticationPrincipal Jwt principal) {
         String userId = principal.getSubject();
-        Collection<BrokerModel> tokens = brokerService.getBrokers(userId);
+        Collection<BrokerModel> brokers = brokerService.getBrokers(userId);
         BrokersDto brokersDto = BrokersDto.builder()
-                .tokens(tokens)
+                .brokers(brokers)
                 .build();
         return ResponseEntity.ok(brokersDto);
     }
