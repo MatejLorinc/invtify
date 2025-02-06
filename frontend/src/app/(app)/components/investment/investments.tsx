@@ -1,5 +1,5 @@
 import Investment from "@/app/(app)/components/investment/investment";
-import {getInvestments} from "@/app/(services)/investment.service";
+import {getInvestments} from "@/app/services/investment.service";
 
 export const dynamic = "force-dynamic",
     revalidate = 0;

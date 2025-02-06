@@ -1,7 +1,7 @@
 "use client"
 
 import React, {useState} from "react";
-import {deleteBroker} from "@/app/(services)/broker.service";
+import {deleteBroker} from "@/app/services/broker.service";
 import {useRouter} from "next/navigation";
 import {FaTrash} from "react-icons/fa6";
 import DeleteConfirmationModal from "@/app/(app)/components/modal/delete-modal";

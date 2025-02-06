@@ -1,8 +1,8 @@
-import {InvestmentModel, InvestmentsDto} from "@/app/(models)/investment/investment";
-import {getExternalApiWithAuth, postExternalApiWithAuth} from "@/app/(services)/external-api.service";
-import InvestmentStrategy from "@/app/(models)/investment/investment-strategy";
-import InvestmentFrequency, {FrequencyType} from "@/app/(models)/investment/investment-frequency";
-import InvestmentBroker from "@/app/(models)/broker/investment-broker";
+import {InvestmentModel, InvestmentsDto} from "@/app/models/investment/investment";
+import {getExternalApiWithAuth, postExternalApiWithAuth} from "@/app/services/external-api.service";
+import InvestmentStrategy from "@/app/models/investment/investment-strategy";
+import InvestmentFrequency, {FrequencyType} from "@/app/models/investment/investment-frequency";
+import InvestmentBroker from "@/app/models/broker/investment-broker";
 
 export async function createInvestment(accessToken: string, investment: InvestmentModel) {
     await postExternalApiWithAuth("api/user/investments", accessToken, investment);

@@ -2,10 +2,10 @@
 
 import React, {useState} from "react";
 import Modal from "@/app/(app)/components/modal/modal";
-import InvestmentBroker from "@/app/(models)/broker/investment-broker";
+import InvestmentBroker from "@/app/models/broker/investment-broker";
 import {Dropdown} from "@/app/(app)/components/modal/dropdown";
 import {TextInput} from "@/app/(app)/components/modal/text-input";
-import {updateBroker} from "@/app/(services)/broker.service";
+import {updateBroker} from "@/app/services/broker.service";
 import {useRouter} from "next/navigation";
 
 export function AddBroker({accessToken, brokerIds}: { accessToken: string, brokerIds: string[] }) {

@@ -2,7 +2,7 @@
 
 import {ReactElement, useState} from "react";
 import {FaPen} from "react-icons/fa6";
-import {formatCurrency} from "@/app/(helpers)/format";
+import {formatCurrency} from "@/app/helpers/format";
 import Image from "next/image";
 import {AiOutlineStock} from "react-icons/ai";
 import {HiOutlineCash} from "react-icons/hi";

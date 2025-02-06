@@ -2,7 +2,7 @@ import Image from "next/image";
 import {FaArrowRight} from "react-icons/fa6";
 import {RiExchangeFundsFill} from "react-icons/ri";
 import InvestmentChart from "@/app/(app)/components/investment/investment-chart";
-import {InvestmentModel} from "@/app/(models)/investment/investment";
+import {InvestmentModel} from "@/app/models/investment/investment";
 import {InvestmentInfoComponent} from "@/app/(app)/components/investment/investment-info";
 
 export default function Investment({id, investmentModel}: { id: number, investmentModel: InvestmentModel }) {

@@ -1,5 +1,5 @@
 import Broker from "@/app/(app)/components/broker/broker";
-import {getBrokers} from "@/app/(services)/broker.service";
+import {getBrokers} from "@/app/services/broker.service";
 import {AddBroker} from "@/app/(app)/components/broker/new-broker";
 
 export const dynamic = "force-dynamic",

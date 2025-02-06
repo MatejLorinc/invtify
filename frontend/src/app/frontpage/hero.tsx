@@ -1,4 +1,4 @@
-import DynamicText from "@/app/(components)/frontpage/DynamicText";
+import DynamicText from "@/app/frontpage/dynamic-text";
 
 export default function Hero() {
     return (

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import {BrokerModel} from "@/app/(models)/broker/investment-broker";
+import {BrokerModel} from "@/app/models/broker/investment-broker";
 import {BrokerAvailableBalance, BrokerToken, BrokerUsedBalance} from "@/app/(app)/components/broker/broker-information";
 import {DeleteBroker} from "@/app/(app)/components/broker/delete-broker";
 
