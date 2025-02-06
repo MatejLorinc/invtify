@@ -20,3 +20,14 @@ export async function postExternalApiWithAuth(path: string, accessToken: string,
         }
     });
 }
+
+export async function deleteExternalApiWithAuth(path: string, accessToken: string, body: any) {
+    return await fetch(`${apiUrl}/${path}`, {
+        method: "DELETE",
+        body: JSON.stringify(body),
+        headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${accessToken}`
+        }
+    });
+}

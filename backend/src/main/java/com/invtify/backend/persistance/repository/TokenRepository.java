@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface TokenRepository extends JpaRepository<Token, String> {
     Optional<Token> findByUserAndBroker(User user, Broker broker);
+
+    void deleteByUserAndBroker(User user, Broker broker);
 }

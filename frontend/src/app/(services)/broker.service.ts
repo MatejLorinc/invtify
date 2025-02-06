@@ -1,5 +1,12 @@
-import {getExternalApiWithAuth, postExternalApiWithAuth} from "@/app/(services)/external-api.service";
+import {deleteExternalApiWithAuth, getExternalApiWithAuth, postExternalApiWithAuth} from "@/app/(services)/external-api.service";
 import InvestmentBroker, {BrokerModel, BrokersDto, TokenDto} from "@/app/(models)/broker/investment-broker";
+
+export async function deleteBroker(accessToken: string, brokerId: string) {
+    await deleteExternalApiWithAuth("api/user/broker", accessToken, {
+        broker: brokerId,
+        token: ""
+    });
+}
 
 export async function updateBroker(accessToken: string, broker: TokenDto) {
     await postExternalApiWithAuth("api/user/broker", accessToken, broker);

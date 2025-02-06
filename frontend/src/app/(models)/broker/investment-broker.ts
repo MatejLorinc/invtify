@@ -4,7 +4,7 @@ export default class InvestmentBroker {
     static readonly BINANCE = new InvestmentBroker("BINANCE", "binance.png", "Binance");
 
     private constructor(
-        public readonly name: string,
+        public readonly id: string,
         public readonly icon: string,
         public readonly displayName: string
     ) {
@@ -32,7 +32,7 @@ export default class InvestmentBroker {
 
     private static addValue(broker: InvestmentBroker) {
         if (this._values) {
-            this._values[broker.name] = broker;
+            this._values[broker.id] = broker;
         }
     }
 }
@@ -76,7 +76,7 @@ export interface TokenModel {
 }
 
 export interface TokenDto {
-    broker: string,
+    brokerId: string,
     token: string
 }
 

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic",
 
 export default async function Brokers({accessToken}: { accessToken: string }) {
     const brokers = await getBrokers(accessToken);
-    const brokerIds = brokers.map(broker => broker.tokenModel.broker.name)
+    const brokerIds = brokers.map(broker => broker.tokenModel.broker.id)
 
     return <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
@@ -16,7 +16,7 @@ export default async function Brokers({accessToken}: { accessToken: string }) {
         </div>
         <div className="flex flex-wrap gap-4">
             {brokers.map((broker, index) =>
-                <Broker key={index} brokerModel={broker} id={index}/>
+                <Broker key={index} accessToken={accessToken} brokerModel={broker} id={index}/>
             )}
             {brokers.length % 2 == 1 ? <div className="basis-1/3 flex-grow min-w-80"/> : ""}
         </div>

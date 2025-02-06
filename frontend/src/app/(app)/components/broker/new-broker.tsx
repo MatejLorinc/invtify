@@ -80,7 +80,7 @@ function NewBrokerModal({accessToken, brokerIds, visible, open, closeDialog}: {
         router.refresh()
     };
 
-    const selectableBrokers = InvestmentBroker.getValues().filter(broker => !brokerIds.includes(broker.name));
+    const selectableBrokers = InvestmentBroker.getValues().filter(broker => !brokerIds.includes(broker.id));
 
     return (
         <Modal
@@ -100,7 +100,7 @@ function NewBrokerModal({accessToken, brokerIds, visible, open, closeDialog}: {
                 name="broker"
                 options={selectableBrokers.map(broker => {
                     return {
-                        value: broker.name,
+                        value: broker.id,
                         label: broker.displayName
                     }
                 })}
