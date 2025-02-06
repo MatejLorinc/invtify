@@ -10,7 +10,8 @@ export default function Broker({accessToken, id, brokerModel}: { accessToken: st
         <div className="flex gap-2 m-2 flex-col">
             <BrokerUsedBalance totalBalance={brokerModel.totalBalance} investedBalance={brokerModel.investedBalance}/>
             <BrokerAvailableBalance availableBalance={brokerModel.availableBalance} reservesLifetime={brokerModel.getReservesLifetime()}/>
-            <BrokerToken brokerToken={brokerModel.tokenModel.token}/>
+            <BrokerToken brokerToken={brokerModel.tokenModel.token} accessToken={accessToken} brokerId={brokerModel.tokenModel.broker.id}
+                         brokerName={brokerModel.tokenModel.broker.displayName}/>
         </div>
     </div>;
 }

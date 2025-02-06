@@ -1,12 +1,12 @@
 "use client"
 
 import {ReactElement, useState} from "react";
-import {FaPen} from "react-icons/fa6";
 import {formatCurrency} from "@/app/helpers/format";
 import Image from "next/image";
 import {AiOutlineStock} from "react-icons/ai";
 import {HiOutlineCash} from "react-icons/hi";
 import {RiHourglassFill} from "react-icons/ri";
+import {EditBroker} from "@/app/(app)/components/broker/edit-broker";
 
 export function BrokerUsedBalance({totalBalance, investedBalance}: { totalBalance: number, investedBalance: number }) {
     return <div className="flex flex-wrap gap-2">
@@ -51,21 +51,20 @@ function BrokerAvailableBalanceComponent({header, info, icon}: { header: string,
     </div>;
 }
 
-export function BrokerToken({brokerToken}: { brokerToken: string }) {
+export function BrokerToken({brokerToken, accessToken, brokerId, brokerName}: { brokerToken: string; accessToken: string; brokerId: string; brokerName: string; }) {
     const [isHolding, setIsHolding] = useState(false);
 
-    return <div className="flex gap-2"
-                onMouseDown={() => setIsHolding(true)}
-                onMouseUp={() => setIsHolding(false)}
-                onMouseLeave={() => setIsHolding(false)} // Ensures state resets if the user drags away
-                onTouchStart={() => setIsHolding(true)}
-                onTouchEnd={() => setIsHolding(false)}>
+    return <div className="flex gap-2">
         <div
-            className="flex basis-0 flex-grow min-w-64 rounded-full p-2 px-4 bg-black/5 justify-between items-center cursor-pointer hover:bg-black/10 transition duration-300">
+            className="flex basis-0 flex-grow min-w-64 rounded-full p-2 px-4 bg-black/5 justify-between items-center cursor-pointer hover:bg-black/10 transition duration-300"
+            onMouseDown={() => setIsHolding(true)}
+            onMouseUp={() => setIsHolding(false)}
+            onMouseLeave={() => setIsHolding(false)} // Ensures state resets if the user drags away
+            onTouchStart={() => setIsHolding(true)}
+            onTouchEnd={() => setIsHolding(false)}>
             {isHolding ? brokerToken : brokerToken.replace(/./g, '•')}
         </div>
-        <div className="text-sm p-3 rounded-full bg-black/5 transition duration-300 ease-in-out hover:bg-black/10 cursor-pointer">
-            <FaPen/>
-        </div>
+
+        <EditBroker accessToken={accessToken} brokerId={brokerId} brokerName={brokerName}/>
     </div>
 }

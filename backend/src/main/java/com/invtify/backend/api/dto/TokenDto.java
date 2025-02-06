@@ -6,6 +6,6 @@ import lombok.Getter;
 @Builder
 @Getter
 public class TokenDto {
-    private final String broker;
+    private final String brokerId;
     private final String token;
 }

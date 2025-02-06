@@ -3,7 +3,7 @@ import InvestmentBroker, {BrokerModel, BrokersDto, TokenDto} from "@/app/models/
 
 export async function deleteBroker(accessToken: string, brokerId: string) {
     await deleteExternalApiWithAuth("api/user/broker", accessToken, {
-        broker: brokerId,
+        brokerId: brokerId,
         token: ""
     });
 }

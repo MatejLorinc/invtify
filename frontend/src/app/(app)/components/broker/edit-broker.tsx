@@ -2,13 +2,12 @@
 
 import React, {useState} from "react";
 import Modal from "@/app/(app)/components/modal/modal";
-import InvestmentBroker from "@/app/models/broker/investment-broker";
-import {Dropdown} from "@/app/(app)/components/modal/dropdown";
 import {TextInput} from "@/app/(app)/components/modal/text-input";
 import {updateBroker} from "@/app/services/broker.service";
 import {useRouter} from "next/navigation";
+import {FaPen} from "react-icons/fa6";
 
-export function AddBroker({accessToken, brokerIds}: { accessToken: string, brokerIds: string[] }) {
+export function EditBroker({accessToken, brokerId, brokerName}: { accessToken: string, brokerId: string, brokerName: string }) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -27,28 +26,24 @@ export function AddBroker({accessToken, brokerIds}: { accessToken: string, broke
     }
 
     return <>
-        <div
-            className="bg-primary-400 items-center rounded-xl overflow-hidden shadow-lg transition duration-300 ease-in-out hover:bg-primary-300  cursor-pointer"
-            onClick={openModal}>
-            <p
-                className="text-sm font-medium px-3 py-2 mt-auto text-white">
-                New Connection
-            </p>
+        <div className="text-sm p-3 rounded-full bg-black/5 transition duration-300 ease-in-out hover:bg-black/10 cursor-pointer"
+             onClick={openModal}>
+            <FaPen/>
         </div>
 
-        <NewBrokerModal accessToken={accessToken} brokerIds={brokerIds} visible={isModalVisible} open={isModalOpen} closeDialog={closeModal}/>
+        <EditBrokerModal accessToken={accessToken} brokerId={brokerId} brokerName={brokerName} visible={isModalVisible} open={isModalOpen} closeDialog={closeModal}/>
     </>
 }
 
-function NewBrokerModal({accessToken, brokerIds, visible, open, closeDialog}: {
+function EditBrokerModal({accessToken, brokerId, brokerName, visible, open, closeDialog}: {
     accessToken: string;
-    brokerIds: string[];
+    brokerId: string;
+    brokerName: string;
     visible: boolean;
     open: boolean;
     closeDialog: () => void;
 }) {
     const [formData, setFormData] = useState({
-        broker: '',
         token: ''
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -57,7 +52,6 @@ function NewBrokerModal({accessToken, brokerIds, visible, open, closeDialog}: {
 
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
-        if (formData.broker.trim() === "") newErrors.broker = 'Please select a broker';
         if (formData.token.trim() === "") newErrors.token = 'Token is required';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -68,46 +62,29 @@ function NewBrokerModal({accessToken, brokerIds, visible, open, closeDialog}: {
         closeDialog()
 
         await updateBroker(accessToken, {
-            brokerId: formData.broker,
+            brokerId: brokerId,
             token: formData.token
         });
 
         setFormData({
-            broker: '',
             token: ''
         })
 
         router.refresh()
     };
 
-    const selectableBrokers = InvestmentBroker.getValues().filter(broker => !brokerIds.includes(broker.id));
-
     return (
         <Modal
             visible={visible}
             open={open}
-            title="Connect New Broker"
+            title={`Edit ${brokerName} Token`}
             closeDialog={closeDialog}
             buttons={[
                 {label: 'Cancel', onClick: closeDialog, variant: 'secondary'},
-                {label: 'Create', onClick: handleSubmit, variant: 'primary'}
+                {label: 'Update', onClick: handleSubmit, variant: 'primary'}
             ]}
             errors={errors}
         >
-            <Dropdown
-                label="Brokerage"
-                placeholder={selectableBrokers.length > 0 ? "Please select broker" : "There are no new brokers to select"}
-                name="broker"
-                options={selectableBrokers.map(broker => {
-                    return {
-                        value: broker.id,
-                        label: broker.displayName
-                    }
-                })}
-                value={formData.broker}
-                onChange={(e) => setFormData({...formData, broker: e.target.value})}
-            />
-
             <TextInput
                 label="Token"
                 name="token"

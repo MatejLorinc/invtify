@@ -37,7 +37,7 @@ public class BrokerController {
     public ResponseEntity<TokenDto> setBroker(@AuthenticationPrincipal Jwt principal, @RequestBody TokenDto token) {
         String userId = principal.getSubject();
         TokenModel tokenModel = TokenModel.builder()
-                .broker(Broker.valueOf(token.getBroker()))
+                .broker(Broker.valueOf(token.getBrokerId()))
                 .token(token.getToken())
                 .build();
         tokenService.setToken(userId, tokenModel);
@@ -47,7 +47,7 @@ public class BrokerController {
     @DeleteMapping
     public ResponseEntity<String> deleteBroker(@AuthenticationPrincipal Jwt principal, @RequestBody TokenDto token) {
         String userId = principal.getSubject();
-        tokenService.deleteToken(userId, Broker.valueOf(token.getBroker()));
+        tokenService.deleteToken(userId, Broker.valueOf(token.getBrokerId()));
         return ResponseEntity.ok("Broker token deleted successfully");
     }
 }
