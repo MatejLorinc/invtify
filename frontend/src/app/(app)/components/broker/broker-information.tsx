@@ -62,7 +62,7 @@ export function BrokerToken({brokerToken}: { brokerToken: string }) {
                 onTouchEnd={() => setIsHolding(false)}>
         <div
             className="flex basis-0 flex-grow min-w-64 rounded-full p-2 px-4 bg-black/5 justify-between items-center cursor-pointer hover:bg-black/10 transition duration-300">
-            {isHolding ? brokerToken : brokerToken.replace(/./g, '*')}
+            {isHolding ? brokerToken : brokerToken.replace(/./g, '•')}
         </div>
         <div className="text-sm p-3 rounded-full bg-black/5 transition duration-300 ease-in-out hover:bg-black/10 cursor-pointer">
             <FaPen/>

@@ -12,6 +12,7 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Broker broker;
 

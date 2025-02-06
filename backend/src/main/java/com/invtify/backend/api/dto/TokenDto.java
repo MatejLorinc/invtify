@@ -5,5 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class UserDto {
+public class TokenDto {
+    private final String broker;
+    private final String token;
 }

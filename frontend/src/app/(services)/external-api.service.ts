@@ -1,4 +1,4 @@
-const apiUrl = process.env.API_URL;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getExternalApiWithAuth(path: string, accessToken: string) {
     return await fetch(`${apiUrl}/${path}`, {

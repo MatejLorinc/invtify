@@ -1,6 +1,8 @@
 package com.invtify.backend.api.controller;
 
 import com.invtify.backend.api.dto.BrokersDto;
+import com.invtify.backend.api.dto.TokenDto;
+import com.invtify.backend.model.broker.Broker;
 import com.invtify.backend.model.broker.BrokerModel;
 import com.invtify.backend.model.broker.TokenModel;
 import com.invtify.backend.service.BrokerService;
@@ -17,7 +19,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(path = "/api/user/broker")
 @RequiredArgsConstructor
-public class UserBrokerController {
+public class BrokerController {
     private final TokenService tokenService;
     private final BrokerService brokerService;
 
@@ -32,9 +34,14 @@ public class UserBrokerController {
     }
 
     @PostMapping
-    public ResponseEntity<TokenModel> setBroker(@AuthenticationPrincipal Jwt principal, @RequestBody TokenModel token) {
+    public ResponseEntity<TokenDto> setBroker(@AuthenticationPrincipal Jwt principal, @RequestBody TokenDto token) {
         String userId = principal.getSubject();
-        tokenService.setToken(userId, token);
+        TokenModel tokenModel = TokenModel.builder()
+                .broker(Broker.valueOf(token.getBroker()))
+                .token(token.getToken())
+                .build();
+        System.out.println(tokenModel);
+        tokenService.setToken(userId, tokenModel);
         return new ResponseEntity<>(token, HttpStatus.CREATED);
     }
 }

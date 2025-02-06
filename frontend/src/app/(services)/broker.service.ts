@@ -1,9 +1,8 @@
-import {InvestmentModel} from "@/app/(models)/investment/investment";
 import {getExternalApiWithAuth, postExternalApiWithAuth} from "@/app/(services)/external-api.service";
-import InvestmentBroker, {BrokerModel, BrokersDto} from "@/app/(models)/broker/investment-broker";
+import InvestmentBroker, {BrokerModel, BrokersDto, TokenDto} from "@/app/(models)/broker/investment-broker";
 
-export async function updateBroker(accessToken: string, investment: InvestmentModel) {
-    await postExternalApiWithAuth("api/user/broker", accessToken, investment);
+export async function updateBroker(accessToken: string, broker: TokenDto) {
+    await postExternalApiWithAuth("api/user/broker", accessToken, broker);
 }
 
 export async function getBrokers(accessToken: string) {

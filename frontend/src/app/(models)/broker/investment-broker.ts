@@ -75,6 +75,11 @@ export interface TokenModel {
     token: string,
 }
 
+export interface TokenDto {
+    broker: string,
+    token: string
+}
+
 export interface BrokersDto {
     brokers: [
         {
