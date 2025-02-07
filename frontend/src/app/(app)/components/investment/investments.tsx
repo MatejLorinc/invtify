@@ -11,7 +11,7 @@ export default async function Investments({accessToken}: { accessToken: string }
         <h1 className="mx-auto text-lg font-semibold">Active Investments</h1>
         <div className="flex flex-wrap gap-4">
             {investments.map((investment, index) =>
-                <Investment key={index} investmentModel={investment} id={index}/>
+                <Investment accessToken={accessToken} key={index} investmentModel={investment} id={index}/>
             )}
             {investments.length % 2 == 1 ? <div className="basis-1/3 flex-grow min-w-80"/> : ""}
         </div>

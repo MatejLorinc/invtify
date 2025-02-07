@@ -46,6 +46,17 @@ public class InvestmentService {
         investment.setFrequencyDay(investmentModel.getFrequency().day());
         investment.setFrequencyHour(investmentModel.getFrequency().hour());
         investment.setAmount(investment.getAmount());
-        investmentRepository.save(user);
+        investmentRepository.save(investment);
+    }
+
+
+    public boolean deleteInvestment(String userId, long investmentId) {
+        Investment investment = investmentRepository.findById(investmentId).orElse(null);
+        if (investment == null) return false;
+        if (!investment.getUser().getId().equals(userId)) {
+            return false;
+        }
+        investmentRepository.deleteById(investmentId);
+        return true;
     }
 }

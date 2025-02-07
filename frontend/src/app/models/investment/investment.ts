@@ -4,6 +4,7 @@ import InvestmentBroker from "@/app/models/broker/investment-broker";
 
 export class InvestmentModel {
     constructor(
+        public uniqueId: number,
         public strategy: InvestmentStrategy,
         public frequency: InvestmentFrequency,
         public asset: InvestmentAsset,
@@ -36,6 +37,7 @@ export interface InvestmentAsset {
 export interface InvestmentsDto {
     investments: [
         {
+            uniqueId: number,
             strategy: string,
             frequency: {
                 type: string,

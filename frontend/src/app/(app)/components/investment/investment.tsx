@@ -4,10 +4,11 @@ import {RiExchangeFundsFill} from "react-icons/ri";
 import InvestmentChart from "@/app/(app)/components/investment/investment-chart";
 import {InvestmentModel} from "@/app/models/investment/investment";
 import {InvestmentInfoComponent} from "@/app/(app)/components/investment/investment-info";
+import {DeleteInvestment} from "@/app/(app)/components/investment/delete-investment";
 
-export default function Investment({id, investmentModel}: { id: number, investmentModel: InvestmentModel }) {
+export default function Investment({accessToken, id, investmentModel}: { accessToken: string, id: number, investmentModel: InvestmentModel }) {
     return <div className="basis-1/3 flex-grow min-w-80 rounded shadow-lg">
-        <InvestmentHeader id={id} investmentModel={investmentModel}/>
+        <InvestmentHeader accessToken={accessToken} id={id} investmentModel={investmentModel}/>
         <div className="flex gap-2 m-2 flex-wrap">
             <InvestmentValue id={id}/>
             <InvestmentInfoComponent header="Strategy" info={investmentModel.strategy.displayName} icon={<RiExchangeFundsFill size="2rem"/>}/>
@@ -24,7 +25,7 @@ export default function Investment({id, investmentModel}: { id: number, investme
     </div>;
 }
 
-function InvestmentHeader({id, investmentModel}: { id: number, investmentModel: InvestmentModel }) {
+function InvestmentHeader({accessToken, id, investmentModel}: { accessToken: string, id: number, investmentModel: InvestmentModel }) {
     return <div className="flex items-center justify-between p-4 rounded-t bg-black/5">
         <div className="flex gap-4">
             <Image src={"/assets/icons/" + investmentModel.asset.icon} alt={investmentModel.asset.asset} width={32} height={32}/>
@@ -37,9 +38,12 @@ function InvestmentHeader({id, investmentModel}: { id: number, investmentModel: 
                 <p className="text-sm overflow-hidden max-w-40">Description</p>
             </div>
         </div>
-        <div className="text-sm text-right">
-            <p className="">Created</p>
-            <p className="font-medium">{investmentModel.createdAt.toLocaleDateString()}</p>
+        <div className="text-sm text-right flex gap-4">
+            <div>
+                <p className="">Created</p>
+                <p className="font-medium">{investmentModel.createdAt.toLocaleDateString()}</p>
+            </div>
+            <DeleteInvestment accessToken={accessToken} investmentId={investmentModel.uniqueId}/>
         </div>
     </div>;
 }

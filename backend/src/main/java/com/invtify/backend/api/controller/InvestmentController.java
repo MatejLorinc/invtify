@@ -1,5 +1,6 @@
 package com.invtify.backend.api.controller;
 
+import com.invtify.backend.api.dto.DeleteInvestmentDto;
 import com.invtify.backend.api.dto.InvestmentsDto;
 import com.invtify.backend.model.investment.InvestmentModel;
 import com.invtify.backend.service.InvestmentService;
@@ -33,5 +34,13 @@ public class InvestmentController {
     public void setInvestment(@AuthenticationPrincipal Jwt principal, @RequestBody InvestmentModel investment) {
         String userId = principal.getSubject();
         investmentService.setInvestment(userId, investment);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteInvestment(@AuthenticationPrincipal Jwt principal, @RequestBody DeleteInvestmentDto deleteInvestmentDto) {
+        String userId = principal.getSubject();
+        boolean deleted = investmentService.deleteInvestment(userId, deleteInvestmentDto.investmentId());
+        if (!deleted) return ResponseEntity.ok("Investment deletion failed");
+        return ResponseEntity.ok("Investment deleted successfully");
     }
 }
