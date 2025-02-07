@@ -20,11 +20,11 @@ export default class InvestmentFrequency {
 }
 
 export class FrequencyType {
-    static readonly EVERY_DAY = new FrequencyType("EVERY_DAY");
-    static readonly EVERY_WEEK = new FrequencyType("EVERY_WEEK");
-    static readonly EVERY_MONTH = new FrequencyType("EVERY_MONTH");
+    static readonly EVERY_DAY = new FrequencyType("EVERY_DAY", "Every Day");
+    static readonly EVERY_WEEK = new FrequencyType("EVERY_WEEK", "Every Week");
+    static readonly EVERY_MONTH = new FrequencyType("EVERY_MONTH", "Every Month");
 
-    private constructor(public readonly name: string) {
+    private constructor(public readonly id: string, public readonly displayName: string) {
     }
 
     private static _values: Record<string, FrequencyType> | null = null;
@@ -49,7 +49,7 @@ export class FrequencyType {
 
     private static addValue(type: FrequencyType) {
         if (this._values) {
-            this._values[type.name] = type;
+            this._values[type.id] = type;
         }
     }
 }

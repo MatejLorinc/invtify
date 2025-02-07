@@ -14,6 +14,7 @@ public final class InvestmentModel {
     private final InvestmentStrategy strategy;
     private final InvestmentFrequency frequency;
     private final float amount;
+    private final float priceDrop;
     private final InvestmentAsset asset;
     private final Date createdAt;
 

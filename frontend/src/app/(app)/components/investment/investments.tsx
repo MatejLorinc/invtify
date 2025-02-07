@@ -1,5 +1,6 @@
 import Investment from "@/app/(app)/components/investment/investment";
 import {getInvestments} from "@/app/services/investment.service";
+import {AddInvestment} from "@/app/(app)/components/investment/new-investment";
 
 export const dynamic = "force-dynamic",
     revalidate = 0;
@@ -8,7 +9,10 @@ export default async function Investments({accessToken}: { accessToken: string }
     const investments = await getInvestments(accessToken);
 
     return <div className="flex flex-col gap-4">
-        <h1 className="mx-auto text-lg font-semibold">Active Investments</h1>
+        <div className="flex justify-between items-center">
+            <h1 className="text-lg font-medium">Investment Strategies</h1>
+            <AddInvestment accessToken={accessToken}/>
+        </div>
         <div className="flex flex-wrap gap-4">
             {investments.map((investment, index) =>
                 <Investment accessToken={accessToken} key={index} investmentModel={investment} id={index}/>

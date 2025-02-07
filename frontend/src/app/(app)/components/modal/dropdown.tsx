@@ -1,7 +1,7 @@
 interface DropdownProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
     label?: string;
     placeholder: string;
-    options: { value: string; label: string }[];
+    options: { value: any; label: string }[];
     error?: string;
 }
 
