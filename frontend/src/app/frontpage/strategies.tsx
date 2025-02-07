@@ -7,7 +7,7 @@ export default function Strategies() {
 
                     <div className="text-gray-700 max-w-4xl mx-auto text-lg">
                         <p>
-                            Whether you're new to investing, looking to optimize your portfolio, aiming to secure
+                            Whether you&apos;re new to investing, looking to optimize your portfolio, aiming to secure
                             profits, or simply seeking a clearer view of your investments, we offer you the tools and
                             flexibility to take control.
                         </p>
@@ -33,11 +33,11 @@ export default function Strategies() {
                         className="flex flex-col max-w-sm w-full sm:w-72 p-6 bg-white border border-gray-200 rounded-lg shadow-lg h-full sm:min-h-96 hover:shadow-xl transition-shadow duration-300">
                         <h5 className="mb-2 text-2xl font-semibold text-gray-900">Limit DCA</h5>
                         <p className="font-normal text-gray-700 mb-4">Invest only if the price drops by a defined
-                            percentage, otherwise buy at next week's market price.</p>
+                            percentage, otherwise buy at next week&apos;s market price.</p>
                         <ul className="list-disc pl-5 text-gray-700 space-y-2">
                             <li>Set a percentage drop for buying.</li>
                             <li>Purchase only if the price drops by the defined amount.</li>
-                            <li>If not, buy at next week's market price.</li>
+                            <li>If not, buy at next week&apos;s market price.</li>
                         </ul>
                     </div>
 
