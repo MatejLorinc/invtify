@@ -1,11 +1,13 @@
 package com.invtify.backend.persistance.entity;
 
 import com.invtify.backend.model.investment.FrequencyType;
-import com.invtify.backend.model.investment.InvestmentStrategy;
+import com.invtify.backend.model.investment.InvestmentStrategyType;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,7 +21,7 @@ public class Investment {
     private InvestmentAsset asset;
 
     @Column(nullable = false)
-    private InvestmentStrategy strategy;
+    private InvestmentStrategyType strategy;
 
     @Column(name = "frequency_type", nullable = false)
     private FrequencyType frequencyType;
@@ -39,11 +41,26 @@ public class Investment {
     @Column(nullable = false)
     private Date createdAt;
 
+    @Column(nullable = false)
+    private float quantity = 0;
+
+    @Column(nullable = false)
+    private float totallyInvested = 0;
+
+    @Column(nullable = false)
+    private float rateOfReturn = 0;
+
+    @Column(nullable = false)
+    private float profitLoss = 0;
+
+    @OneToMany(mappedBy = "investment")
+    private List<InvestmentDatetimeValue> datetimeValues = new ArrayList<>();
+
     @Override
     public String toString() {
         return "Investment{" +
                 "id=" + id +
-                ", asset=" + asset +
+                ", asset=" + asset.getId() +
                 ", strategy=" + strategy +
                 ", frequencyType=" + frequencyType +
                 ", frequencyDay=" + frequencyDay +
@@ -51,6 +68,11 @@ public class Investment {
                 ", amount=" + amount +
                 ", user=" + user.getId() +
                 ", createdAt=" + createdAt +
+                ", quantity=" + quantity +
+                ", totallyInvested=" + totallyInvested +
+                ", rateOfReturn=" + rateOfReturn +
+                ", profitLoss=" + profitLoss +
+                ", datetimeValues=" + datetimeValues +
                 '}';
     }
 }

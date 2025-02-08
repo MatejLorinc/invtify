@@ -1,6 +1,7 @@
 package com.invtify.backend.service;
 
 import com.invtify.backend.model.investment.InvestmentModel;
+import com.invtify.backend.model.investment.InvestmentStrategy;
 import com.invtify.backend.persistance.entity.Investment;
 import com.invtify.backend.persistance.entity.User;
 import com.invtify.backend.persistance.repository.InvestmentRepository;
@@ -20,31 +21,23 @@ public class InvestmentService {
         return user.getInvestments().stream().map(InvestmentModel::create).toList();
     }
 
-    public void setInvestment(String userId, InvestmentModel investmentModel) {
+    public void setInvestment(String userId, InvestmentStrategy investmentStrategy) {
         User user = userService.getUser(userId);
-        Investment investment = user.getInvestments().stream()
-                .filter(currentInvestment -> currentInvestment.getId() == investmentModel.getUniqueId())
-                .findAny().orElse(null);
-        if (investment != null) {
-            editInvestment(user, investment, investmentModel);
-        } else {
-            createInvestment(user, investmentModel);
-        }
+        createInvestment(user, investmentStrategy);
     }
 
-    public void createInvestment(User user, InvestmentModel investmentModel) {
+    public void createInvestment(User user, InvestmentStrategy investmentStrategy) {
         Investment investment = new Investment();
-        editInvestment(user, investment, investmentModel);
+        editInvestment(user, investment, investmentStrategy);
     }
 
-    public void editInvestment(User user, Investment investment, InvestmentModel investmentModel) {
+    public void editInvestment(User user, Investment investment, InvestmentStrategy investmentStrategy) {
         investment.setUser(user);
-        investment.setId(investmentModel.getUniqueId());
-        investment.setAsset(investmentModel.getAsset());
-        investment.setStrategy(investmentModel.getStrategy());
-        investment.setFrequencyType(investmentModel.getFrequency().type());
-        investment.setFrequencyDay(investmentModel.getFrequency().day());
-        investment.setFrequencyHour(investmentModel.getFrequency().hour());
+        investment.setAsset(investmentStrategy.getAsset());
+        investment.setStrategy(investmentStrategy.getStrategy());
+        investment.setFrequencyType(investmentStrategy.getFrequency().type());
+        investment.setFrequencyDay(investmentStrategy.getFrequency().day());
+        investment.setFrequencyHour(investmentStrategy.getFrequency().hour());
         investment.setAmount(investment.getAmount());
         investmentRepository.save(investment);
     }

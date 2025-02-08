@@ -3,6 +3,7 @@ package com.invtify.backend.api.controller;
 import com.invtify.backend.api.dto.DeleteInvestmentDto;
 import com.invtify.backend.api.dto.InvestmentsDto;
 import com.invtify.backend.model.investment.InvestmentModel;
+import com.invtify.backend.model.investment.InvestmentStrategy;
 import com.invtify.backend.service.InvestmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class InvestmentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void setInvestment(@AuthenticationPrincipal Jwt principal, @RequestBody InvestmentModel investment) {
+    public void setInvestment(@AuthenticationPrincipal Jwt principal, @RequestBody InvestmentStrategy investment) {
         String userId = principal.getSubject();
         investmentService.setInvestment(userId, investment);
     }

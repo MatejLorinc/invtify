@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public final class InvestmentModel {
+public final class InvestmentDatetimeValueModel {
     private final long uniqueId;
     private final InvestmentStrategy investmentStrategy;
     private final float currentValue;
@@ -14,8 +14,8 @@ public final class InvestmentModel {
     private final float rateOfReturn;
     private final float profitLoss;
 
-    public static InvestmentModel create(Investment investment) {
-        return InvestmentModel.builder()
+    public static InvestmentDatetimeValueModel create(Investment investment) {
+        return InvestmentDatetimeValueModel.builder()
                 .uniqueId(investment.getId())
                 .investmentStrategy(InvestmentStrategy.create(investment))
                 .build();
