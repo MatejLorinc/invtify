@@ -24,6 +24,7 @@ public class InvestmentStrategy {
                 .strategy(investment.getStrategy())
                 .frequency(new InvestmentFrequency(investment.getFrequencyType(), investment.getFrequencyDay(), investment.getFrequencyHour()))
                 .amount(investment.getAmount())
+                .priceDrop(investment.getPriceDrop())
                 .createdAt(investment.getCreatedAt())
                 .build();
     }

@@ -4,13 +4,14 @@ import com.invtify.backend.model.broker.Broker;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Entity
 @Table(name = "investment_assets")
 public class InvestmentAsset {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private UUID id;
 
     @Column(nullable = false)
     private String asset;
@@ -19,6 +20,7 @@ public class InvestmentAsset {
     private String currency;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Broker broker;
 
     @Column(nullable = false)

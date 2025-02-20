@@ -5,6 +5,13 @@ export function formatCurrency(value: number) {
     });
 }
 
+export function formatPercentage(value: number) {
+    return new Intl.NumberFormat("sk-SK", {
+        style: "percent",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(value / 100);
+}
 
 export function formatDate(date: Date) {
     return date.toLocaleString("sk", {

@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Modal from "@/app/(app)/components/modal/modal";
 import {Dropdown} from "@/app/(app)/components/modal/dropdown";
 import {TextInput} from "@/app/(app)/components/modal/text-input";
@@ -8,8 +8,10 @@ import {useRouter} from "next/navigation";
 import InvestmentStrategy from "@/app/models/investment/investment-strategy";
 import InvestmentFrequency, {FrequencyType} from "@/app/models/investment/investment-frequency";
 import {createInvestment} from "@/app/services/investment.service";
+import InvestmentBroker, {TokenDto} from "@/app/models/broker/investment-broker";
+import {getInvestmentAssets} from "@/app/services/asset.service";
 
-export function AddInvestment({accessToken}: { accessToken: string }) {
+export function AddInvestment({accessToken, brokers}: { accessToken: string, brokers: TokenDto[] }) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -37,25 +39,53 @@ export function AddInvestment({accessToken}: { accessToken: string }) {
             </p>
         </div>
 
-        <NewInvestmentModal accessToken={accessToken} visible={isModalVisible} open={isModalOpen} closeDialog={closeModal}/>
+        <NewInvestmentModal accessToken={accessToken} visible={isModalVisible} brokers={brokers} open={isModalOpen} closeDialog={closeModal}/>
     </>
 }
 
-function NewInvestmentModal({accessToken, visible, open, closeDialog}: {
+function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: {
     accessToken: string;
     visible: boolean;
+    brokers: TokenDto[];
     open: boolean;
     closeDialog: () => void;
 }) {
     const [formData, setFormData] = useState({
         strategy: '',
         broker: '',
+        asset: '',
         frequencyType: '',
         day: null as number | null,
         hour: null as number | null,
         purchaseWorth: '',
         priceDrop: ''
     });
+    const [brokerAssets, setBrokerAssets] = useState<{ value: string; label: string }[]>([]);
+    const [loadingAssets, setLoadingAssets] = useState(false);
+
+    useEffect(() => {
+        if (formData.broker) {
+            const fetchAssets = async () => {
+                try {
+                    setLoadingAssets(true);
+                    const selectedBroker = brokers.find(broker => broker.brokerId === formData.broker);
+                    if (selectedBroker === null || selectedBroker === undefined) return
+                    const response = await fetchBrokerAssets(accessToken, selectedBroker);
+                    setBrokerAssets(response.map(asset => ({
+                        value: asset.asset,
+                        label: `${asset.asset} (${asset.currency})`
+                    })));
+                } catch (error) {
+                    console.error('Failed to fetch assets:', error);
+                    setBrokerAssets([]);
+                } finally {
+                    setLoadingAssets(false);
+                }
+            };
+            fetchAssets();
+        }
+    }, [formData.broker, accessToken]);
+
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const router = useRouter()
@@ -63,21 +93,21 @@ function NewInvestmentModal({accessToken, visible, open, closeDialog}: {
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
 
-        // Existing validations
         if (formData.strategy.trim() === "") newErrors.strategy = 'Please select a strategy';
         if (formData.broker.trim() === "") newErrors.broker = 'Please select a broker';
         if (formData.purchaseWorth.trim() === "") newErrors.purchaseWorth = 'Purchase worth is required';
 
-        // Frequency validation
         if (!formData.frequencyType) {
             newErrors.frequencyType = 'Please select a frequency type';
         } else {
-            // Day validation for weekly/monthly
             if ([FrequencyType.EVERY_WEEK.id, FrequencyType.EVERY_MONTH.id].includes(formData.frequencyType)) {
                 if (formData.day === null) newErrors.day = 'Please select a day';
             }
-            // Time validation
             if (formData.hour === null) newErrors.hour = 'Please select a time';
+        }
+
+        if (formData.broker.trim() !== "" && formData.asset.trim() === "") {
+            newErrors.asset = 'Please select an asset';
         }
 
         setErrors(newErrors);
@@ -87,18 +117,21 @@ function NewInvestmentModal({accessToken, visible, open, closeDialog}: {
     const handleSubmit = async () => {
         if (!validateForm()) return;
 
-        const frequency = new InvestmentFrequency(
-            FrequencyType.fromName(formData.frequencyType),
-            formData.day || 0, // Default to 0 if not applicable
-            formData.hour || 0
-        );
-
-        // Submit logic here (replace updateBroker with actual API call)
         await createInvestment(accessToken, {
-            brokerId: formData.broker,
-            token: formData.token,
-            // Include other necessary fields
-            frequency
+            strategy: formData.strategy,
+            frequency: {
+                type: formData.frequencyType,
+                day: formData.day || 1,
+                hour: formData.hour || 0
+            },
+            amount: parseInt(formData.purchaseWorth),
+            asset: {
+                asset: formData.asset,
+                currency: "EUR",
+                broker: formData.broker,
+                icon: formData.broker === InvestmentBroker.BINANCE.id ? "crypto.png" : "etf.png"
+            },
+            createdAt: Date.now().toString(),
         });
 
         closeDialog();
@@ -117,7 +150,6 @@ function NewInvestmentModal({accessToken, visible, open, closeDialog}: {
             ]}
             errors={errors}
         >
-            {/* Strategy Dropdown */}
             <Dropdown
                 label="Strategy"
                 placeholder="Please select strategy"
@@ -130,17 +162,33 @@ function NewInvestmentModal({accessToken, visible, open, closeDialog}: {
                 onChange={(e) => setFormData({...formData, strategy: e.target.value})}
             />
 
-            {/* Broker Dropdown (fix options as needed) */}
             <Dropdown
                 label="Broker"
-                placeholder="Please connect broker"
+                placeholder={brokers.length > 0 ? "Please select broker" : "Please connect broker"}
                 name="broker"
-                options={[]} // Replace with actual broker options
+                options={brokers.map(broker => {
+                    return {
+                        value: broker.brokerId,
+                        label: InvestmentBroker.fromName(broker.brokerId).displayName
+                    }
+                })}
                 value={formData.broker}
                 onChange={(e) => setFormData({...formData, broker: e.target.value})}
             />
 
-            {/* Frequency Type Dropdown */}
+            {formData.broker && (
+                <Dropdown
+                    label="Asset"
+                    placeholder={loadingAssets ? "Loading assets..." : "Select asset"}
+                    name="asset"
+                    options={brokerAssets}
+                    value={formData.asset}
+                    onChange={(e) => setFormData({...formData, asset: e.target.value})}
+                    disabled={loadingAssets || !brokerAssets.length}
+                />
+            )}
+
+
             <Dropdown
                 label="Frequency Type"
                 placeholder="Please select frequency type"
@@ -155,7 +203,6 @@ function NewInvestmentModal({accessToken, visible, open, closeDialog}: {
 
             {formData.frequencyType && (
                 <div className="space-y-4">
-                    {/* Day of Week */}
                     {formData.frequencyType === FrequencyType.EVERY_WEEK.id && (
                         <Dropdown
                             label="Day of the Week"
@@ -170,7 +217,6 @@ function NewInvestmentModal({accessToken, visible, open, closeDialog}: {
                         />
                     )}
 
-                    {/* Day of Month */}
                     {formData.frequencyType === FrequencyType.EVERY_MONTH.id && (
                         <Dropdown
                             label="Day of the Month"
@@ -185,7 +231,6 @@ function NewInvestmentModal({accessToken, visible, open, closeDialog}: {
                         />
                     )}
 
-                    {/* Time Picker */}
                     <Dropdown
                         label="Time"
                         placeholder="Select hour"
@@ -222,5 +267,13 @@ function NewInvestmentModal({accessToken, visible, open, closeDialog}: {
             )}
         </Modal>
     );
+}
 
+async function fetchBrokerAssets(accessToken: string, tokenDto: TokenDto) {
+    return getInvestmentAssets(accessToken, tokenDto)
+    // return [
+    //     {id: 'asset1', name: 'Bitcoin', symbol: 'BTC'},
+    //     {id: 'asset2', name: 'Ethereum', symbol: 'ETH'},
+    //     {id: 'asset3', name: 'Gold', symbol: 'XAU'}
+    // ];
 }

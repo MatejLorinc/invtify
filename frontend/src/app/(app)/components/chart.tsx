@@ -2,7 +2,7 @@ import {ReactElement, useCallback, useRef, useState} from "react";
 import * as d3 from "d3";
 import {formatCurrency, formatDate} from "@/app/helpers/format";
 
-type DataEntry = { date: Date, value: number };
+export type DataEntry = { date: Date, value: number };
 
 export function LineChart({
                               data,

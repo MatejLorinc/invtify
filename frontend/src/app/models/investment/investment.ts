@@ -9,7 +9,13 @@ export class InvestmentModel {
         public frequency: InvestmentFrequency,
         public asset: InvestmentAsset,
         public amount: number,
-        public createdAt: Date
+        public priceDrop: number,
+        public createdAt: Date,
+        public currentValue: number,
+        public totallyInvested: number,
+        public rateOfReturn: number,
+        public profitLoss: number,
+        public investmentDatetimeValues: [InvestmentDatetimeValueDto]
     ) {
     }
 
@@ -27,6 +33,10 @@ export class InvestmentModel {
     }
 }
 
+export interface InvestmentAssetsDto {
+    assets: InvestmentAsset[]
+}
+
 export interface InvestmentAsset {
     asset: string,
     currency: string,
@@ -38,20 +48,35 @@ export interface InvestmentsDto {
     investments: [
         {
             uniqueId: number,
-            strategy: string,
-            frequency: {
-                type: string,
-                day: number,
-                hour: number
-            },
-            amount: number,
-            asset: {
-                asset: string,
-                currency: string,
-                broker: string
-                icon: string
-            },
-            createdAt: string
+            investmentStrategy: InvestmentStrategyDto,
+            currentValue: number,
+            totallyInvested: number,
+            rateOfReturn: number,
+            profitLoss: number,
+            investmentDatetimeValues: [InvestmentDatetimeValueDto]
         }
     ]
+}
+
+export interface InvestmentStrategyDto {
+    strategy: string
+    frequency: {
+        type: string
+        day: number
+        hour: number
+    },
+    amount: number
+    priceDrop: number
+    asset: {
+        asset: string
+        currency: string
+        broker: string
+        icon: string
+    },
+    createdAt: string
+}
+
+export interface InvestmentDatetimeValueDto {
+    value: number,
+    datetime: string
 }

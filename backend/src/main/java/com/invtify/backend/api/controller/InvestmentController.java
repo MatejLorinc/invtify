@@ -23,7 +23,7 @@ public class InvestmentController {
     @GetMapping
     public ResponseEntity<InvestmentsDto> getInvestments(@AuthenticationPrincipal Jwt principal) {
         String userId = principal.getSubject();
-        Collection<InvestmentModel> investments = investmentService.getInvestments(userId); // null
+        Collection<InvestmentModel> investments = investmentService.getInvestments(userId);
         InvestmentsDto investmentsDto = InvestmentsDto.builder()
                 .investments(investments)
                 .build();
@@ -34,6 +34,7 @@ public class InvestmentController {
     @ResponseStatus(HttpStatus.CREATED)
     public void setInvestment(@AuthenticationPrincipal Jwt principal, @RequestBody InvestmentStrategy investment) {
         String userId = principal.getSubject();
+        System.out.println(investment);
         investmentService.setInvestment(userId, investment);
     }
 

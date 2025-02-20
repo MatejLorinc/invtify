@@ -35,6 +35,9 @@ public class Investment {
     @Column(nullable = false)
     private float amount;
 
+    @Column(nullable = false)
+    private float priceDrop;
+
     @ManyToOne
     private User user;
 
@@ -65,6 +68,7 @@ public class Investment {
                 ", frequencyType=" + frequencyType +
                 ", frequencyDay=" + frequencyDay +
                 ", frequencyHour=" + frequencyHour +
+                ", priceDrop=" + priceDrop +
                 ", amount=" + amount +
                 ", user=" + user.getId() +
                 ", createdAt=" + createdAt +
