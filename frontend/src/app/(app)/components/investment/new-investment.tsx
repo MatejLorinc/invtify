@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from "react";
 import Modal from "@/app/(app)/components/modal/modal";
-import {Dropdown} from "@/app/(app)/components/modal/dropdown";
+import {Dropdown, SearchableDropdown} from "@/app/(app)/components/modal/dropdown";
 import {TextInput} from "@/app/(app)/components/modal/text-input";
 import {useRouter} from "next/navigation";
 import InvestmentStrategy from "@/app/models/investment/investment-strategy";
@@ -177,7 +177,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
             />
 
             {formData.broker && (
-                <Dropdown
+                <SearchableDropdown
                     label="Asset"
                     placeholder={loadingAssets ? "Loading assets..." : "Select asset"}
                     name="asset"

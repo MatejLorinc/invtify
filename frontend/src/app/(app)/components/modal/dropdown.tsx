@@ -1,3 +1,6 @@
+import {TextInput} from "@/app/(app)/components/modal/text-input";
+import {useState} from "react";
+
 interface DropdownProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
     label?: string;
     placeholder: string;
@@ -27,6 +30,22 @@ export function Dropdown({label, placeholder, options, error, ...props}: Dropdow
                 ))}
             </select>
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+        </div>
+    );
+}
+
+export function SearchableDropdown({label, placeholder, options, value, error}: DropdownProps) {
+    const [searchPrompt, setSearchPrompt] = useState("")
+    return (
+        <div className="mb-4">
+            <TextInput label={label}
+                       placeholder={placeholder}
+                       error={error}
+                       value={searchPrompt}
+                       onChange={(e) => setSearchPrompt(e.target.value)}/>
+            <div className="bg-gray-50 h-64">
+
+            </div>
         </div>
     );
 }
