@@ -1,4 +1,4 @@
-import {InvestmentModel, InvestmentsDto, InvestmentStrategyDto} from "@/app/models/investment/investment";
+import {CreateInvestmentStrategyDto, InvestmentModel, InvestmentsDto} from "@/app/models/investment/investment";
 import {deleteExternalApiWithAuth, getExternalApiWithAuth, postExternalApiWithAuth} from "@/app/services/external-api.service";
 import InvestmentStrategy from "@/app/models/investment/investment-strategy";
 import InvestmentFrequency, {FrequencyType} from "@/app/models/investment/investment-frequency";
@@ -8,7 +8,7 @@ export async function deleteInvestment(accessToken: string, investmentId: number
     await deleteExternalApiWithAuth("api/user/investments", accessToken, {investmentId: investmentId});
 }
 
-export async function createInvestment(accessToken: string, investment: InvestmentStrategyDto) {
+export async function createInvestment(accessToken: string, investment: CreateInvestmentStrategyDto) {
     await postExternalApiWithAuth("api/user/investments", accessToken, investment);
 }
 

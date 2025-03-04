@@ -56,7 +56,7 @@ export function BrokerToken({brokerToken, accessToken, brokerId, brokerName}: { 
 
     return <div className="flex gap-2">
         <div
-            className="flex basis-0 flex-grow min-w-64 rounded-full p-2 px-4 bg-black/5 justify-between items-center cursor-pointer hover:bg-black/10 transition duration-300"
+            className="flex basis-0 flex-grow min-w-64 rounded-full p-2 px-4 bg-black/5 justify-between items-center cursor-pointer hover:bg-black/10 transition duration-300 overflow-hidden"
             onMouseDown={() => setIsHolding(true)}
             onMouseUp={() => setIsHolding(false)}
             onMouseLeave={() => setIsHolding(false)} // Ensures state resets if the user drags away

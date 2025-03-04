@@ -28,8 +28,8 @@ export default function Investment({accessToken, id, investmentModel}: { accessT
 
 function InvestmentHeader({accessToken, id, investmentModel}: { accessToken: string, id: number, investmentModel: InvestmentModel }) {
     return <div className="flex items-center justify-between p-4 rounded-t bg-black/5">
-        <div className="flex gap-4">
-            <Image src={"/assets/icons/" + investmentModel.asset.icon} alt={investmentModel.asset.asset} width={32} height={32}/>
+        <div className="flex gap-4 items-center justify-center">
+            <Image src={"/assets/icons/" + investmentModel.asset.icon} alt={investmentModel.asset.asset} width={32} height={32} className="w-[32px] h-[32px] object-contain"/>
             <div className="font-medium flex items-center gap-1 text-sm">
                 <p>{investmentModel.asset.currency}</p>
                 <FaArrowRight/>

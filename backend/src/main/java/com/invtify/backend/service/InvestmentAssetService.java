@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -15,6 +16,10 @@ import java.util.concurrent.CompletableFuture;
 public class InvestmentAssetService {
     private final BrokerServices brokerServices;
     private final InvestmentAssetRepository investmentAssetRepository;
+
+    public InvestmentAsset getInvestmentAsset(UUID id) {
+        return investmentAssetRepository.findById(id).get();
+    }
 
     public CompletableFuture<Collection<InvestmentAsset>> getInvestmentAssets(Broker broker, String brokerToken) {
         Collection<InvestmentAsset> cachedAssets = investmentAssetRepository.findAllByBroker(broker);

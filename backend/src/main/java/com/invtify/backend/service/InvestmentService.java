@@ -1,5 +1,6 @@
 package com.invtify.backend.service;
 
+import com.invtify.backend.api.dto.CreateInvestmentStrategyDto;
 import com.invtify.backend.model.investment.InvestmentModel;
 import com.invtify.backend.model.investment.InvestmentStrategy;
 import com.invtify.backend.persistance.entity.Investment;
@@ -13,6 +14,7 @@ import java.util.Collection;
 @Service
 @RequiredArgsConstructor
 public class InvestmentService {
+    private final InvestmentAssetService assetService;
     private final InvestmentRepository investmentRepository;
     private final UserService userService;
 
@@ -21,9 +23,21 @@ public class InvestmentService {
         return user.getInvestments().stream().map(InvestmentModel::create).toList();
     }
 
-    public void setInvestment(String userId, InvestmentStrategy investmentStrategy) {
+    public void setInvestment(String userId, CreateInvestmentStrategyDto createInvestmentStrategyDto) {
         User user = userService.getUser(userId);
+        InvestmentStrategy investmentStrategy = createStrategyFromCreateDto(createInvestmentStrategyDto);
         createInvestment(user, investmentStrategy);
+    }
+
+    private InvestmentStrategy createStrategyFromCreateDto(CreateInvestmentStrategyDto createDto) {
+        return InvestmentStrategy.builder()
+                .asset(assetService.getInvestmentAsset(createDto.getAssetId()))
+                .strategy(createDto.getStrategy())
+                .frequency(createDto.getFrequency())
+                .amount(createDto.getAmount())
+                .priceDrop(createDto.getPriceDrop())
+                .createdAt(createDto.getCreatedAt())
+                .build();
     }
 
     public void createInvestment(User user, InvestmentStrategy investmentStrategy) {
@@ -38,7 +52,8 @@ public class InvestmentService {
         investment.setFrequencyType(investmentStrategy.getFrequency().type());
         investment.setFrequencyDay(investmentStrategy.getFrequency().day());
         investment.setFrequencyHour(investmentStrategy.getFrequency().hour());
-        investment.setAmount(investment.getAmount());
+        investment.setAmount(investmentStrategy.getAmount());
+        investment.setCreatedAt(investmentStrategy.getCreatedAt());
         investmentRepository.save(investment);
     }
 

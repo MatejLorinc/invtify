@@ -72,7 +72,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                     if (selectedBroker === null || selectedBroker === undefined) return
                     const response = await fetchBrokerAssets(accessToken, selectedBroker);
                     setBrokerAssets(response.map(asset => ({
-                        value: asset.asset,
+                        value: asset.id,
                         label: `${asset.asset} (${asset.currency})`
                     })));
                 } catch (error) {
@@ -125,12 +125,8 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                 hour: formData.hour || 0
             },
             amount: parseInt(formData.purchaseWorth),
-            asset: {
-                asset: formData.asset,
-                currency: "EUR",
-                broker: formData.broker,
-                icon: formData.broker === InvestmentBroker.BINANCE.id ? "crypto.png" : "etf.png"
-            },
+            priceDrop: formData.strategy === InvestmentStrategy.LIMIT_DCA.id ? parseInt(formData.priceDrop) : 0,
+            assetId: formData.asset,
             createdAt: Date.now().toString(),
         });
 
@@ -183,7 +179,8 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                     name="asset"
                     options={brokerAssets}
                     value={formData.asset}
-                    onChange={(e) => setFormData({...formData, asset: e.target.value})}
+                    onChange={(option) => setFormData({...formData, asset: option.value})}
+                    noOptionsText="No assets found"
                     disabled={loadingAssets || !brokerAssets.length}
                 />
             )}

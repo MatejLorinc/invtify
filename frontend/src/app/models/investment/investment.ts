@@ -38,6 +38,7 @@ export interface InvestmentAssetsDto {
 }
 
 export interface InvestmentAsset {
+    id: string,
     asset: string,
     currency: string,
     broker: InvestmentBroker
@@ -68,11 +69,25 @@ export interface InvestmentStrategyDto {
     amount: number
     priceDrop: number
     asset: {
+        id: string
         asset: string
         currency: string
         broker: string
         icon: string
     },
+    createdAt: string
+}
+
+export interface CreateInvestmentStrategyDto {
+    strategy: string
+    frequency: {
+        type: string
+        day: number
+        hour: number
+    },
+    amount: number
+    priceDrop: number
+    assetId: string,
     createdAt: string
 }
 
