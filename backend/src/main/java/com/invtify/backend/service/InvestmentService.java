@@ -6,6 +6,7 @@ import com.invtify.backend.model.investment.InvestmentStrategy;
 import com.invtify.backend.persistance.entity.Investment;
 import com.invtify.backend.persistance.entity.User;
 import com.invtify.backend.persistance.repository.InvestmentRepository;
+import com.invtify.backend.service.broker.services.InvestmentAssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

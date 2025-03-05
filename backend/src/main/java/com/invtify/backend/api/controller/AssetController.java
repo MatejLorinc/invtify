@@ -3,7 +3,7 @@ package com.invtify.backend.api.controller;
 import com.invtify.backend.api.dto.InvestmentAssetsDto;
 import com.invtify.backend.model.broker.Broker;
 import com.invtify.backend.persistance.entity.InvestmentAsset;
-import com.invtify.backend.service.InvestmentAssetService;
+import com.invtify.backend.service.broker.services.InvestmentAssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

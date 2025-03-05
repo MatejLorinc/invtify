@@ -1,4 +1,4 @@
-package com.invtify.backend.service;
+package com.invtify.backend.service.broker.services;
 
 import com.invtify.backend.model.broker.Broker;
 import com.invtify.backend.persistance.entity.InvestmentAsset;

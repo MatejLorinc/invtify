@@ -2,27 +2,25 @@ package com.invtify.backend.service;
 
 import com.invtify.backend.model.broker.BrokerModel;
 import com.invtify.backend.model.broker.TokenModel;
+import com.invtify.backend.service.broker.services.BrokerFundsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
 public class BrokerService {
+    private final BrokerFundsService fundsService;
     private final TokenService tokenService;
 
-    public Collection<BrokerModel> getBrokers(String userId) {
-        return tokenService.getTokenModels(userId).stream().map(this::toBrokerModel).toList();
+    public CompletableFuture<Collection<BrokerModel>> getBrokers(String userId) {
+        return CompletableFuture.supplyAsync(() -> tokenService.getTokenModels(userId).stream().map(tokenModel -> toBrokerModel(tokenModel).join()).toList());
     }
 
-    public BrokerModel toBrokerModel(TokenModel tokenModel) {
-        return BrokerModel.builder()
-                .tokenModel(tokenModel)
-                .availableBalance(0)
-                .investedBalance(0)
-                .totalBalance(0)
-                .reservesLifetimeDays(0)
-                .build();
+    public CompletableFuture<BrokerModel> toBrokerModel(TokenModel tokenModel) {
+        return fundsService.getBrokerFunds(tokenModel.getBroker(), tokenModel.getToken())
+                .thenApply(brokerFunds -> new BrokerModel(tokenModel, brokerFunds, 0));
     }
 }

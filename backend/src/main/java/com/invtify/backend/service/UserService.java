@@ -3,6 +3,7 @@ package com.invtify.backend.service;
 import com.invtify.backend.model.UserModel;
 import com.invtify.backend.persistance.entity.User;
 import com.invtify.backend.persistance.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,9 @@ public class UserService {
                 .build();
     }
 
+    @Transactional
     public User getUser(String id) {
         User user = userRepository.findById(id).orElse(null);
-
         if (user == null) {
             user = new User(id);
             userRepository.save(user);

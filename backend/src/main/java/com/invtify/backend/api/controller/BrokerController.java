@@ -26,7 +26,7 @@ public class BrokerController {
     @GetMapping
     public ResponseEntity<BrokersDto> getBrokers(@AuthenticationPrincipal Jwt principal) {
         String userId = principal.getSubject();
-        Collection<BrokerModel> brokers = brokerService.getBrokers(userId);
+        Collection<BrokerModel> brokers = brokerService.getBrokers(userId).join();
         BrokersDto brokersDto = BrokersDto.builder()
                 .brokers(brokers)
                 .build();

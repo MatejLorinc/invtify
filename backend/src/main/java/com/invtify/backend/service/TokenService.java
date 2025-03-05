@@ -29,7 +29,6 @@ public class TokenService {
     @Transactional
     public void setToken(String userId, TokenModel tokenModel) {
         User user = userService.getUser(userId);
-
         tokenRepository.findByUserAndBroker(user, tokenModel.getBroker()).ifPresentOrElse(token -> {
             token.setToken(tokenModel.getToken());
             tokenRepository.save(token);
