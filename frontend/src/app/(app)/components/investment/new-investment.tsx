@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from "react";
 import Modal from "@/app/(app)/components/modal/modal";
-import {Dropdown, SearchableDropdown} from "@/app/(app)/components/modal/dropdown";
+import {Dropdown} from "@/app/(app)/components/modal/dropdown";
 import {TextInput} from "@/app/(app)/components/modal/text-input";
 import {useRouter} from "next/navigation";
 import InvestmentStrategy from "@/app/models/investment/investment-strategy";
@@ -10,6 +10,7 @@ import InvestmentFrequency, {FrequencyType} from "@/app/models/investment/invest
 import {createInvestment} from "@/app/services/investment.service";
 import InvestmentBroker, {TokenDto} from "@/app/models/broker/investment-broker";
 import {getInvestmentAssets} from "@/app/services/asset.service";
+import {SearchableDropdown} from "../modal/searchable-dropdown";
 
 export function AddInvestment({accessToken, brokers}: { accessToken: string, brokers: TokenDto[] }) {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -54,6 +55,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
         strategy: '',
         broker: '',
         asset: '',
+        currency: '',
         frequencyType: '',
         day: null as number | null,
         hour: null as number | null,
@@ -63,15 +65,23 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
     const [brokerAssets, setBrokerAssets] = useState<{ value: string; label: string }[]>([]);
     const [loadingAssets, setLoadingAssets] = useState(false);
 
+    const currencyOptions = [
+        {value: 'USD', label: '$ (USD)'},
+        {value: 'EUR', label: '€ (EUR)'},
+        {value: 'GBP', label: '£ (GBP)'}
+    ];
+
     useEffect(() => {
-        if (formData.broker) {
+        if (formData.broker && formData.currency) {
             const fetchAssets = async () => {
                 try {
                     setLoadingAssets(true);
                     const selectedBroker = brokers.find(broker => broker.brokerId === formData.broker);
-                    if (selectedBroker === null || selectedBroker === undefined) return
+                    if (!selectedBroker) return;
                     const response = await fetchBrokerAssets(accessToken, selectedBroker);
-                    setBrokerAssets(response.map(asset => ({
+
+                    const filteredAssets = response.filter(asset => asset.currency === formData.currency);
+                    setBrokerAssets(filteredAssets.map(asset => ({
                         value: asset.id,
                         label: `${asset.asset} (${asset.currency})`
                     })));
@@ -84,30 +94,49 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
             };
             fetchAssets();
         }
-    }, [formData.broker, accessToken]);
+    }, [formData.broker, formData.currency, accessToken, brokers]);
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const router = useRouter()
+    const router = useRouter();
 
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
 
-        if (formData.strategy.trim() === "") newErrors.strategy = 'Please select a strategy';
-        if (formData.broker.trim() === "") newErrors.broker = 'Please select a broker';
-        if (formData.purchaseWorth.trim() === "") newErrors.purchaseWorth = 'Purchase worth is required';
+        if (formData.strategy.trim() === "")
+            newErrors.strategy = 'Please select a strategy';
+        if (formData.broker.trim() === "")
+            newErrors.broker = 'Please select a broker';
+
+        if (formData.broker && formData.currency.trim() === "")
+            newErrors.currency = 'Please select a currency';
+
+        if (formData.broker && formData.currency && formData.asset.trim() === "")
+            newErrors.asset = 'Please select an asset';
+
+        if (formData.purchaseWorth.trim() === "") {
+            newErrors.purchaseWorth = 'Purchase worth is required';
+        } else if (isNaN(Number(formData.purchaseWorth))) {
+            newErrors.purchaseWorth = 'Purchase worth must be a number';
+        }
 
         if (!formData.frequencyType) {
             newErrors.frequencyType = 'Please select a frequency type';
         } else {
             if ([FrequencyType.EVERY_WEEK.id, FrequencyType.EVERY_MONTH.id].includes(formData.frequencyType)) {
-                if (formData.day === null) newErrors.day = 'Please select a day';
+                if (formData.day === null || isNaN(formData.day))
+                    newErrors.day = 'Please select a day';
             }
-            if (formData.hour === null) newErrors.hour = 'Please select a time';
+            if (formData.hour === null || isNaN(formData.hour))
+                newErrors.hour = 'Please select a time';
         }
 
-        if (formData.broker.trim() !== "" && formData.asset.trim() === "") {
-            newErrors.asset = 'Please select an asset';
+        if (formData.strategy === InvestmentStrategy.DCA_LIMIT.id) {
+            if (formData.priceDrop.trim() === "") {
+                newErrors.priceDrop = 'Price drop percentage is required';
+            } else if (isNaN(Number(formData.priceDrop))) {
+                newErrors.priceDrop = 'Price drop must be a number';
+            }
         }
 
         setErrors(newErrors);
@@ -116,6 +145,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
 
     const handleSubmit = async () => {
         if (!validateForm()) return;
+        closeDialog();
 
         await createInvestment(accessToken, {
             strategy: formData.strategy,
@@ -125,12 +155,11 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                 hour: formData.hour || 0
             },
             amount: parseInt(formData.purchaseWorth),
-            priceDrop: formData.strategy === InvestmentStrategy.LIMIT_DCA.id ? parseInt(formData.priceDrop) : 0,
+            priceDrop: formData.strategy === InvestmentStrategy.DCA_LIMIT.id ? parseInt(formData.priceDrop) : 0,
             assetId: formData.asset,
             createdAt: Date.now().toString(),
         });
 
-        closeDialog();
         router.refresh();
     };
 
@@ -156,23 +185,41 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                 }))}
                 value={formData.strategy}
                 onChange={(e) => setFormData({...formData, strategy: e.target.value})}
+                error={errors.strategy}
             />
 
             <Dropdown
                 label="Broker"
                 placeholder={brokers.length > 0 ? "Please select broker" : "Please connect broker"}
                 name="broker"
-                options={brokers.map(broker => {
-                    return {
-                        value: broker.brokerId,
-                        label: InvestmentBroker.fromName(broker.brokerId).displayName
-                    }
-                })}
+                options={brokers.map(broker => ({
+                    value: broker.brokerId,
+                    label: InvestmentBroker.fromName(broker.brokerId).displayName
+                }))}
                 value={formData.broker}
-                onChange={(e) => setFormData({...formData, broker: e.target.value})}
+                onChange={(e) => {
+                    // Reset currency and asset when broker changes
+                    setFormData({...formData, broker: e.target.value, currency: '', asset: ''});
+                }}
+                error={errors.broker}
             />
 
             {formData.broker && (
+                <Dropdown
+                    label="Currency"
+                    placeholder="Select currency"
+                    name="currency"
+                    options={currencyOptions}
+                    value={formData.currency}
+                    onChange={(e) => {
+                        // Reset asset when currency changes
+                        setFormData({...formData, currency: e.target.value, asset: ''});
+                    }}
+                    error={errors.currency}
+                />
+            )}
+
+            {formData.broker && formData.currency && (
                 <SearchableDropdown
                     label="Asset"
                     placeholder={loadingAssets ? "Loading assets..." : "Select asset"}
@@ -182,9 +229,9 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                     onChange={(option) => setFormData({...formData, asset: option.value})}
                     noOptionsText="No assets found"
                     disabled={loadingAssets || !brokerAssets.length}
+                    error={errors.asset}
                 />
             )}
-
 
             <Dropdown
                 label="Frequency Type"
@@ -196,6 +243,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                 }))}
                 value={formData.frequencyType}
                 onChange={(e) => setFormData({...formData, frequencyType: e.target.value})}
+                error={errors.frequencyType}
             />
 
             {formData.frequencyType && (
@@ -211,6 +259,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                             }))}
                             value={formData.day?.toString() || ''}
                             onChange={(e) => setFormData({...formData, day: parseInt(e.target.value)})}
+                            error={errors.day}
                         />
                     )}
 
@@ -225,6 +274,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                             }))}
                             value={formData.day?.toString() || ''}
                             onChange={(e) => setFormData({...formData, day: parseInt(e.target.value)})}
+                            error={errors.day}
                         />
                     )}
 
@@ -236,8 +286,9 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                             value: i,
                             label: `${i}:00`
                         }))}
-                        value={formData.hour?.toString() || ''}
+                        value={formData.hour !== null ? formData.hour.toString() : ''}
                         onChange={(e) => setFormData({...formData, hour: parseInt(e.target.value)})}
+                        error={errors.hour}
                     />
                 </div>
             )}
@@ -248,9 +299,11 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                 placeholder={`Enter amount to ${formData.strategy === InvestmentStrategy.EXIT_DCA.id ? "sell" : "buy"} for each cycle`}
                 value={formData.purchaseWorth}
                 onChange={(e) => setFormData({...formData, purchaseWorth: e.target.value})}
+                type="number"
+                error={errors.purchaseWorth}
             />
 
-            {formData.strategy === InvestmentStrategy.LIMIT_DCA.id && (
+            {formData.strategy === InvestmentStrategy.DCA_LIMIT.id && (
                 <TextInput
                     label="Price Drop Percentage"
                     name="priceDrop"
@@ -260,6 +313,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                     type="number"
                     min="0"
                     max="100"
+                    error={errors.priceDrop}
                 />
             )}
         </Modal>
@@ -267,10 +321,5 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
 }
 
 async function fetchBrokerAssets(accessToken: string, tokenDto: TokenDto) {
-    return getInvestmentAssets(accessToken, tokenDto)
-    // return [
-    //     {id: 'asset1', name: 'Bitcoin', symbol: 'BTC'},
-    //     {id: 'asset2', name: 'Ethereum', symbol: 'ETH'},
-    //     {id: 'asset3', name: 'Gold', symbol: 'XAU'}
-    // ];
+    return getInvestmentAssets(accessToken, tokenDto);
 }

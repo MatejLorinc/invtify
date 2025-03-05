@@ -19,7 +19,7 @@ export default function Investment({accessToken, id, investmentModel}: { accessT
             <InvestmentInfoComponent header="Frequency" info={investmentModel.getFrequencyDatetime()}
                                      icon={<Image src="/assets/icons/calendar.svg" alt="calendar" width={32}
                                                   height={32}/>}/>
-            <InvestmentInfoComponent header="Purchase worth" info={investmentModel.getCurrencyAmount()}
+            <InvestmentInfoComponent header="Purchase Worth" info={investmentModel.getCurrencyAmount()}
                                      icon={<Image src="/assets/icons/coins-swap.svg" alt="coins-swap" width={32}
                                                   height={32}/>}/>
         </div>
@@ -29,7 +29,8 @@ export default function Investment({accessToken, id, investmentModel}: { accessT
 function InvestmentHeader({accessToken, id, investmentModel}: { accessToken: string, id: number, investmentModel: InvestmentModel }) {
     return <div className="flex items-center justify-between p-4 rounded-t bg-black/5">
         <div className="flex gap-4 items-center justify-center">
-            <Image src={"/assets/icons/" + investmentModel.asset.icon} alt={investmentModel.asset.asset} width={32} height={32} className="w-[32px] h-[32px] object-contain"/>
+            <Image src={"/assets/icons/" + investmentModel.asset.icon} alt={investmentModel.asset.asset} width={32} height={32}
+                   className="w-[32px] h-[32px] object-contain"/>
             <div className="font-medium flex items-center gap-1 text-sm">
                 <p>{investmentModel.asset.currency}</p>
                 <FaArrowRight/>

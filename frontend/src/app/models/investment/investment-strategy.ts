@@ -1,6 +1,6 @@
 export default class InvestmentStrategy {
     static readonly DCA_MARKET = new InvestmentStrategy("DCA_MARKET", "DCA - Market");
-    static readonly LIMIT_DCA = new InvestmentStrategy("LIMIT_DCA", "DCA - Limit");
+    static readonly DCA_LIMIT = new InvestmentStrategy("DCA_LIMIT", "DCA - Limit");
     static readonly EXIT_DCA = new InvestmentStrategy("EXIT_DCA", "Exit DCA");
 
     private constructor(
@@ -15,7 +15,7 @@ export default class InvestmentStrategy {
         if (!this._values) {
             this._values = {};
             this.addValue(InvestmentStrategy.DCA_MARKET);
-            this.addValue(InvestmentStrategy.LIMIT_DCA);
+            this.addValue(InvestmentStrategy.DCA_LIMIT);
             this.addValue(InvestmentStrategy.EXIT_DCA);
         }
         return this._values;
