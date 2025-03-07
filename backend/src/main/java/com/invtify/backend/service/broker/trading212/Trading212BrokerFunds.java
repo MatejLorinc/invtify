@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class Trading212BrokerFunds {
-    private int blocked;
-    private int free;
-    private int invested;
-    private int pieCash;
+    private float blocked;
+    private float free;
+    private float invested;
+    private float pieCash;
     private int ppl;
-    private int result;
-    private int total;
+    private float result;
+    private float total;
 }

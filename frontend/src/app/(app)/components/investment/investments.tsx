@@ -1,14 +1,13 @@
 import Investment from "@/app/(app)/components/investment/investment";
 import {getInvestments} from "@/app/services/investment.service";
 import {AddInvestment} from "@/app/(app)/components/investment/new-investment";
-import {getBrokers} from "@/app/services/broker.service";
+import {BrokerModel} from "@/app/models/broker/investment-broker";
 
 export const dynamic = "force-dynamic",
     revalidate = 0;
 
-export default async function Investments({accessToken}: { accessToken: string }) {
+export default async function Investments({accessToken, brokers}: { accessToken: string, brokers: BrokerModel[] }) {
     const investments = await getInvestments(accessToken);
-    const brokers = await getBrokers(accessToken);
     const tokenDtos = brokers.map(broker => {
         return {
             brokerId: broker.tokenModel.broker.id,

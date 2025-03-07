@@ -1,12 +1,11 @@
 import Broker from "@/app/(app)/components/broker/broker";
-import {getBrokers} from "@/app/services/broker.service";
 import {AddBroker} from "@/app/(app)/components/broker/new-broker";
+import {BrokerModel} from "@/app/models/broker/investment-broker";
 
 export const dynamic = "force-dynamic",
     revalidate = 0;
 
-export default async function Brokers({accessToken}: { accessToken: string }) {
-    const brokers = await getBrokers(accessToken);
+export default async function Brokers({accessToken, brokers}: { accessToken: string, brokers: BrokerModel[] }) {
     const brokerIds = brokers.map(broker => broker.tokenModel.broker.id)
 
     return <div className="flex flex-col gap-4">

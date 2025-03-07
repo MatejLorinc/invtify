@@ -5,11 +5,12 @@ import {BrokerAvailableBalance, BrokerToken, BrokerUsedBalance} from "@/app/(app
 import {DeleteBroker} from "@/app/(app)/components/broker/delete-broker";
 
 export default function Broker({accessToken, id, brokerModel}: { accessToken: string, id: number, brokerModel: BrokerModel }) {
+    console.log(brokerModel)
     return <div className="basis-1/3 flex-grow min-w-80 rounded shadow-lg">
         <BrokerHeader accessToken={accessToken} brokerModel={brokerModel}/>
         <div className="flex gap-2 m-2 flex-col">
-            <BrokerUsedBalance totalBalance={brokerModel.totalBalance} investedBalance={brokerModel.investedBalance}/>
-            <BrokerAvailableBalance availableBalance={brokerModel.availableBalance} reservesLifetime={brokerModel.getReservesLifetime()}/>
+            <BrokerUsedBalance totalBalance={brokerModel.funds.total} investedBalance={brokerModel.funds.invested}/>
+            <BrokerAvailableBalance availableBalance={brokerModel.funds.available} reservesLifetime={brokerModel.getReservesLifetime()}/>
             <BrokerToken brokerToken={brokerModel.tokenModel.token} accessToken={accessToken} brokerId={brokerModel.tokenModel.broker.id}
                          brokerName={brokerModel.tokenModel.broker.displayName}/>
         </div>

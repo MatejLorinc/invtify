@@ -1,5 +1,6 @@
 package com.invtify.backend.service.broker.trading212;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.invtify.backend.model.broker.Broker;
 import com.invtify.backend.persistance.entity.InvestmentAsset;
 import com.invtify.backend.service.broker.services.BrokerFunds;
@@ -7,6 +8,7 @@ import com.invtify.backend.service.broker.services.GetBrokerFundsService;
 import com.invtify.backend.service.broker.services.GetInvestmentAssetsService;
 import com.invtify.backend.utils.NetworkUtils;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -18,7 +20,9 @@ public class Trading212Service implements GetInvestmentAssetsService, GetBrokerF
         return CompletableFuture.supplyAsync(() -> {
             List<Trading212InvestmentAsset> apiAssets = NetworkUtils.getHttpRequest("https://demo.trading212.com",
                     "/api/v0/equity/metadata/instruments",
-                    brokerToken);
+                    brokerToken,
+                    new TypeReference<>() {
+                    });
 
             return apiAssets.stream()
                     .map(apiAsset -> {
@@ -38,10 +42,15 @@ public class Trading212Service implements GetInvestmentAssetsService, GetBrokerF
         return CompletableFuture.supplyAsync(() -> {
             Trading212BrokerFunds brokerFunds = NetworkUtils.getHttpRequest("https://demo.trading212.com",
                     "/api/v0/equity/account/cash",
-                    brokerToken);
+                    brokerToken,
+                    new TypeReference<>() {
+                        @Override
+                        public Type getType() {
+                            return Trading212BrokerFunds.class;
+                        }
+                    });
 
-            System.out.println(brokerFunds);
-            return new BrokerFunds(0, 0, 0);
+            return new BrokerFunds(brokerFunds.getTotal(), brokerFunds.getInvested(), brokerFunds.getFree());
         });
     }
 }

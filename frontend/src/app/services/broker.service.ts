@@ -13,6 +13,7 @@ export async function updateBroker(accessToken: string, broker: TokenDto) {
 }
 
 export async function getBrokers(accessToken: string) {
+    console.log("getBrokers")
     const response = await getExternalApiWithAuth("api/user/broker", accessToken);
     const data: BrokersDto = await response.json() as BrokersDto;
     return data.brokers.map((brokerData) =>
@@ -20,9 +21,7 @@ export async function getBrokers(accessToken: string) {
                 broker: InvestmentBroker.fromName(brokerData.tokenModel.broker),
                 token: brokerData.tokenModel.token
             },
-            brokerData.totalBalance,
-            brokerData.investedBalance,
-            brokerData.availableBalance,
+            brokerData.funds,
             brokerData.reservesLifetimeDays)
     );
 }

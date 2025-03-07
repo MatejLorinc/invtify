@@ -17,7 +17,7 @@ public class User {
     @Column(updatable = false, nullable = false)
     private String id;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Collection<Token> tokens = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")

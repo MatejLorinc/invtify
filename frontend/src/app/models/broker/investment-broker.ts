@@ -40,9 +40,7 @@ export default class InvestmentBroker {
 export class BrokerModel {
     constructor(
         public tokenModel: TokenModel,
-        public totalBalance: number,
-        public investedBalance: number,
-        public availableBalance: number,
+        public funds: BrokerFunds,
         public reservesLifetimeDays: number
     ) {
     }
@@ -80,6 +78,12 @@ export interface TokenDto {
     token: string
 }
 
+export interface BrokerFunds {
+    total: number,
+    invested: number,
+    available: number
+}
+
 export interface BrokersDto {
     brokers: [
         {
@@ -87,9 +91,7 @@ export interface BrokersDto {
                 broker: string,
                 token: string
             },
-            totalBalance: number,
-            investedBalance: number,
-            availableBalance: number,
+            funds: BrokerFunds,
             reservesLifetimeDays: number,
         }
     ]

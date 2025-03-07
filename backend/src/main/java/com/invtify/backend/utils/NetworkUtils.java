@@ -14,7 +14,7 @@ public class NetworkUtils {
         throw new IllegalStateException("Utility class cannot be instantiated");
     }
 
-    public static <T> T getHttpRequest(String host, String pathname, String authorizationToken) {
+    public static <T> T getHttpRequest(String host, String pathname, String authorizationToken, TypeReference<T> typeReference) {
         try {
             HttpClient httpClient = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
@@ -25,8 +25,7 @@ public class NetworkUtils {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return new ObjectMapper().readValue(response.body(), new TypeReference<>() {
-            });
+            return new ObjectMapper().readValue(response.body(), typeReference);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
