@@ -40,7 +40,7 @@ export default function DynamicText({options, stay}: { options: string[], stay: 
         }, stay);
 
         return () => clearInterval(textUpdater);
-    }, []);
+    }, [options, stay]);
 
 
     return (
