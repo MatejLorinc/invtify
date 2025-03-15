@@ -5,7 +5,6 @@ import {BrokerAvailableBalance, BrokerToken, BrokerUsedBalance} from "@/app/(app
 import {DeleteBroker} from "@/app/(app)/components/broker/delete-broker";
 
 export default function Broker({accessToken, id, brokerModel}: { accessToken: string, id: number, brokerModel: BrokerModel }) {
-    console.log(brokerModel)
     return <div className="basis-1/3 flex-grow min-w-80 rounded shadow-lg">
         <BrokerHeader accessToken={accessToken} brokerModel={brokerModel}/>
         <div className="flex gap-2 m-2 flex-col">

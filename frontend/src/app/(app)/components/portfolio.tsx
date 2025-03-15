@@ -1,25 +1,10 @@
 "use client"
 
 import PortfolioChart from "@/app/(app)/components/portfolio-chart";
-import {useState} from "react";
-
-const timeframes = [
-    {
-        label: "Day"
-    },
-    {
-        label: "Week"
-    },
-    {
-        label: "Month"
-    },
-    {
-        label: "Year"
-    },
-    {
-        label: "Max"
-    }
-]
+import {useEffect, useState} from "react";
+import {getPortfolio} from "@/app/services/portfolio.service";
+import {PortfolioTimeframe} from "@/app/models/portfolio/portfolio-timeframe";
+import {formatCurrency, formatPercentage} from "@/app/helpers/format";
 
 function PortfolioInfoComponent({title, value, additionalValue}: { title: string, value: string, additionalValue: string }) {
     return <div className="flex w-48 rounded p-2 px-4 flex-col gap-0.5 text-center">
@@ -29,28 +14,51 @@ function PortfolioInfoComponent({title, value, additionalValue}: { title: string
     </div>;
 }
 
-export default function Portfolio() {
-    const [activeTimeframe, setActiveTimeframe] = useState(timeframes[timeframes.length - 1]);
+export default function Portfolio({accessToken, totalCash}: { accessToken: string, totalCash: number }) {
+    const [activeTimeframe, setActiveTimeframe] = useState(PortfolioTimeframe.MAX);
+    const [portfolio, setPortfolio] = useState<any | null>(null);
+
+    useEffect(() => {
+        async function fetchPortfolio() {
+            const data = await getPortfolio(accessToken, activeTimeframe);
+            setPortfolio(data);
+        }
+
+        fetchPortfolio();
+    }, [accessToken, activeTimeframe]);
+
+
+    if (!portfolio) {
+        return <div className="bg-background-default rounded overflow-hidden shadow-lg">
+            <div className="flex flex-wrap gap-2 justify-around">
+                <PortfolioInfoComponent title="Current Balance" value={formatCurrency(0)}
+                                        additionalValue={"Cash: " + formatCurrency(0)}/>
+                <PortfolioInfoComponent title="Total Return" value={formatPercentage(0)}
+                                        additionalValue={formatCurrency(0)}/>
+                <PortfolioInfoComponent title={activeTimeframe.displayName + " Return"} value={formatPercentage(0)}
+                                        additionalValue={formatCurrency(0)}/>
+            </div>
+        </div>;
+    }
 
     return <div className="bg-background-default rounded overflow-hidden shadow-lg">
         <div className="flex flex-wrap gap-2 justify-around">
-            <PortfolioInfoComponent title="Current Balance" value="12 345,67 €" additionalValue="Cash: 1000,00 €"/>
-            <PortfolioInfoComponent title="Total Return" value="+64,61%" additionalValue="+4845,67 €"/>
-            <PortfolioInfoComponent title="Year to Date Return" value="+64,61%" additionalValue="+4845,67 €"/>
+            <PortfolioInfoComponent title="Current Balance" value={formatCurrency(portfolio.currentValue)}
+                                    additionalValue={"Cash: " + formatCurrency(totalCash)}/>
+            <PortfolioInfoComponent title="Total Return" value={formatPercentage(portfolio.totalReturnPercentage)}
+                                    additionalValue={formatCurrency(portfolio.totalReturn)}/>
+            <PortfolioInfoComponent title={activeTimeframe.displayName + " Return"} value={formatPercentage(portfolio.totalReturnPercentage)}
+                                    additionalValue={formatCurrency(portfolio.totalReturn)}/>
         </div>
         <PortfolioChart/>
         <div className="bg-background-default">
             <div className="flex justify-evenly py-2 px-4">
-                {timeframes.map((timeframe, index) => <TimeframeButton key={index}
-                                                                       timeframe={timeframe.label}
-                                                                       active={timeframes[index] === activeTimeframe}
-                                                                       setActive={() => setActiveTimeframe(timeframes[index])}/>)}
+                {PortfolioTimeframe.getValues().map((timeframe, index) => <TimeframeButton key={index}
+                                                                                           timeframe={timeframe.displayName}
+                                                                                           active={timeframe === activeTimeframe}
+                                                                                           setActive={() => setActiveTimeframe(timeframe)}/>)}
             </div>
         </div>
-        {/*<h2>Cash Holdings</h2>*/}
-        {/*<p>1 234,56 €</p>*/}
-        {/*<h2>Total Balance</h2>*/}
-        {/*<p>13 580,23 €</p>*/}
     </div>;
 }
 

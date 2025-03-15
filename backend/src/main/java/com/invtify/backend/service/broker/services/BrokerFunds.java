@@ -1,4 +1,4 @@
 package com.invtify.backend.service.broker.services;
 
-public record BrokerFunds(double total, double invested, double available) {
+public record BrokerFunds(float total, float invested, float available) {
 }

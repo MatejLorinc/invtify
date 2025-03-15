@@ -50,7 +50,7 @@ public class Trading212Service implements GetInvestmentAssetsService, GetBrokerF
                         }
                     });
 
-            return new BrokerFunds(brokerFunds.getTotal(), brokerFunds.getInvested(), brokerFunds.getFree());
+            return new BrokerFunds(brokerFunds.getTotal(), brokerFunds.getTotal() - brokerFunds.getFree(), brokerFunds.getFree());
         });
     }
 }

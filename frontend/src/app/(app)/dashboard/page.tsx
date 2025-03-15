@@ -8,9 +8,10 @@ export default withPageAuthRequired(async function Dashboard() {
     const session = await getSession() as Session;
 
     const brokers = await getBrokers(session.accessToken as string);
-    
+    const totalCash = brokers.reduce((sum, broker) => sum + broker.funds.available, 0);
+
     return <div className="mx-4 mb-4 flex flex-col gap-8">
-        <Portfolio/>
+        <Portfolio accessToken={session.accessToken as string} totalCash={totalCash}/>
         <Investments accessToken={session.accessToken as string} brokers={brokers}/>
         <Brokers accessToken={session.accessToken as string} brokers={brokers}/>
     </div>;
