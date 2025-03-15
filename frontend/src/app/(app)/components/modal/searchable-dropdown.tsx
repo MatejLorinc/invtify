@@ -33,7 +33,7 @@ export function SearchableDropdown({
     // Update selection and close dropdown
     const handleOptionSelect = (option: { value: any; label: string }) => {
         setSearchPrompt(option.label);
-        onChange?.(option);
+        onChange?.(option.value);
         setIsOpen(false);
     };
 

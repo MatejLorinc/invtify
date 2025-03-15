@@ -226,7 +226,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
                     name="asset"
                     options={brokerAssets}
                     value={formData.asset}
-                    onChange={(option) => setFormData({...formData, asset: option.value})}
+                    onChange={(option: any) => setFormData({...formData, asset: option})}
                     noOptionsText="No assets found"
                     disabled={loadingAssets || !brokerAssets.length}
                     error={errors.asset}
