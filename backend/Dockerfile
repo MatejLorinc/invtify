@@ -8,7 +8,7 @@ COPY . .
 
 RUN chmod +x ./gradlew
 
-RUN --mount=type=secret,id=env_properties,dst=/etc/secrets/env.properties ./gradlew bootJar --no-daemon
+RUN --mount=type=secret,id=env_properties,dst=./env.properties ./gradlew bootJar --no-daemon
 
 FROM openjdk:17-jdk-slim
 
