@@ -16,4 +16,6 @@ EXPOSE 443
 
 COPY --from=build /build/libs/invtify-0.0.1-SNAPSHOT.jar app.jar
 
+COPY --from=build ./env.properties ./env.properties
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
