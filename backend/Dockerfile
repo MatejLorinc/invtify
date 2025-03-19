@@ -1,3 +1,5 @@
+# syntax = docker/dockerfile:1.2
+
 FROM ubuntu:latest AS build
 
 RUN apt-get update
