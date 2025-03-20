@@ -29,6 +29,7 @@ public class Trading212Service implements GetInvestmentAssetsService, GetBrokerF
                         InvestmentAsset investmentAsset = new InvestmentAsset();
                         investmentAsset.setId(UUID.randomUUID());
                         investmentAsset.setAsset(apiAsset.getName());
+                        investmentAsset.setTicker(apiAsset.getTicker());
                         investmentAsset.setCurrency(apiAsset.getCurrencyCode());
                         investmentAsset.setBroker(Broker.TRADING_212);
                         investmentAsset.setIcon("etf.png");

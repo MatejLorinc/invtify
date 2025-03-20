@@ -17,6 +17,9 @@ public class InvestmentAsset {
     private String asset;
 
     @Column(nullable = false)
+    private String ticker;
+
+    @Column(nullable = false)
     private String currency;
 
     @Column(nullable = false)
