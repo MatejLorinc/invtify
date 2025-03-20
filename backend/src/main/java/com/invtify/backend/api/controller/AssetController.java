@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping(path = "/api/user/assets")
@@ -23,10 +26,16 @@ public class AssetController {
 
     @GetMapping
     public ResponseEntity<InvestmentAssetsDto> get(@AuthenticationPrincipal Jwt principal, @RequestParam String brokerId, @RequestParam String token) {
-        Collection<InvestmentAsset> investmentsAssets = investmentAssetService.getInvestmentAssets(
-                Broker.valueOf(brokerId),
-                token
-        ).join();
-        return ResponseEntity.ok(new InvestmentAssetsDto(investmentsAssets));
+        try {
+            Collection<InvestmentAsset> investmentsAssets = investmentAssetService.getInvestmentAssets(
+                    Broker.valueOf(brokerId),
+                    token
+            ).get(15, TimeUnit.SECONDS);
+
+            return ResponseEntity.ok(new InvestmentAssetsDto(investmentsAssets));
+        } catch (InterruptedException | ExecutionException | TimeoutException exception) {
+            exception.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

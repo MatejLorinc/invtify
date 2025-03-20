@@ -2,6 +2,7 @@ package com.invtify.backend.model.investment;
 
 import com.invtify.backend.api.dto.InvestmentDatetimeValueDto;
 import com.invtify.backend.persistance.entity.Investment;
+import com.invtify.backend.service.broker.services.OpenPosition;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,14 +19,18 @@ public final class InvestmentModel {
     private final float profitLoss;
     private final List<InvestmentDatetimeValueDto> investmentDatetimeValues;
 
-    public static InvestmentModel create(Investment investment) {
+    public static InvestmentModel create(Investment investment, OpenPosition position) {
+        float currentValue = position.price() * position.quantity();
+        float totallyInvested = investment.getTotallyInvested();
+        float profitLoss = currentValue - totallyInvested;
+
         return InvestmentModel.builder()
                 .uniqueId(investment.getId())
                 .investmentStrategy(InvestmentStrategy.create(investment))
-                .currentValue(investment.getTotallyInvested() + investment.getProfitLoss())
-                .totallyInvested(investment.getTotallyInvested())
-                .rateOfReturn(investment.getRateOfReturn())
-                .profitLoss(investment.getProfitLoss())
+                .currentValue(currentValue)
+                .totallyInvested(totallyInvested)
+                .rateOfReturn(totallyInvested == 0 ? 0 : profitLoss / totallyInvested * 100)
+                .profitLoss(profitLoss)
                 .investmentDatetimeValues(investment.getDatetimeValues().stream()
                         .map(investmentDatetimeValue ->
                                 new InvestmentDatetimeValueDto(investmentDatetimeValue.getValue(),

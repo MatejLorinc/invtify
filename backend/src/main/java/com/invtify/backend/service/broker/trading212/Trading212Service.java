@@ -62,7 +62,9 @@ public class Trading212Service implements GetInvestmentAssetsService, GetBrokerF
                     new TypeReference<>() {
                     });
 
-            return new OpenPosition(brokerFunds.getTotal(), brokerFunds.getTotal() - brokerFunds.getFree(), brokerFunds.getFree());
+            return openPositions.stream().map(position -> new OpenPosition(Broker.TRADING_212, position.getTicker(),
+                    position.getCurrentPrice(),
+                    position.getQuantity())).toList();
         });
     }
 }

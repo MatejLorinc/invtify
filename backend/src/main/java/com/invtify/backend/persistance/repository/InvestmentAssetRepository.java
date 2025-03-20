@@ -11,4 +11,6 @@ import java.util.UUID;
 @Repository
 public interface InvestmentAssetRepository extends JpaRepository<InvestmentAsset, UUID> {
     Collection<InvestmentAsset> findAllByBroker(Broker broker);
+
+    InvestmentAsset findByBrokerAndTicker(Broker broker, String ticker);
 }

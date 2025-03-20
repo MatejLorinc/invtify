@@ -50,12 +50,6 @@ public class Investment {
     @Column(nullable = false)
     private float totallyInvested = 0;
 
-    @Column(nullable = false)
-    private float rateOfReturn = 0;
-
-    @Column(nullable = false)
-    private float profitLoss = 0;
-
     @OneToMany(mappedBy = "investment")
     private List<InvestmentDatetimeValue> datetimeValues = new ArrayList<>();
 
@@ -74,8 +68,6 @@ public class Investment {
                 ", createdAt=" + createdAt +
                 ", quantity=" + quantity +
                 ", totallyInvested=" + totallyInvested +
-                ", rateOfReturn=" + rateOfReturn +
-                ", profitLoss=" + profitLoss +
                 ", datetimeValues=" + datetimeValues +
                 '}';
     }

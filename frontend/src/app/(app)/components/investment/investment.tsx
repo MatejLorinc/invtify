@@ -70,7 +70,7 @@ function InvestmentValue({id, investmentModel}: { id: number, investmentModel: I
 }
 
 function InvestmentGain({id, investmentModel}: { id: number, investmentModel: InvestmentModel }) {
-    const sign = investmentModel.rateOfReturn >= 0 ? "+ " : "- ";
+    const sign = investmentModel.rateOfReturn >= 0 ? "+" : "";
 
     const data = [
         {date: new Date(2024, 4, 27), value: 1},
