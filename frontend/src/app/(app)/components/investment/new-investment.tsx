@@ -66,9 +66,7 @@ function NewInvestmentModal({accessToken, visible, brokers, open, closeDialog}: 
     const [loadingAssets, setLoadingAssets] = useState(false);
 
     const currencyOptions = [
-        {value: 'USD', label: '$ (USD)'},
         {value: 'EUR', label: '€ (EUR)'},
-        {value: 'GBP', label: '£ (GBP)'}
     ];
 
     useEffect(() => {
