@@ -3,9 +3,7 @@ package com.invtify.backend.service.broker.trading212;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.invtify.backend.model.broker.Broker;
 import com.invtify.backend.persistance.entity.InvestmentAsset;
-import com.invtify.backend.service.broker.services.BrokerFunds;
-import com.invtify.backend.service.broker.services.GetBrokerFundsService;
-import com.invtify.backend.service.broker.services.GetInvestmentAssetsService;
+import com.invtify.backend.service.broker.services.*;
 import com.invtify.backend.utils.NetworkUtils;
 
 import java.lang.reflect.Type;
@@ -14,7 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public class Trading212Service implements GetInvestmentAssetsService, GetBrokerFundsService {
+public class Trading212Service implements GetInvestmentAssetsService, GetBrokerFundsService, GetOpenPositionsService {
     @Override
     public CompletableFuture<List<InvestmentAsset>> fetchInvestmentAssets(String brokerToken) {
         return CompletableFuture.supplyAsync(() -> {
@@ -52,6 +50,19 @@ public class Trading212Service implements GetInvestmentAssetsService, GetBrokerF
                     });
 
             return new BrokerFunds(brokerFunds.getTotal(), brokerFunds.getTotal() - brokerFunds.getFree(), brokerFunds.getFree());
+        });
+    }
+
+    @Override
+    public CompletableFuture<List<OpenPosition>> fetchOpenPositions(String brokerToken) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<Trading212OpenPosition> openPositions = NetworkUtils.getHttpRequest("https://demo.trading212.com",
+                    "/api/v0/equity/portfolio",
+                    brokerToken,
+                    new TypeReference<>() {
+                    });
+
+            return new OpenPosition(brokerFunds.getTotal(), brokerFunds.getTotal() - brokerFunds.getFree(), brokerFunds.getFree());
         });
     }
 }
