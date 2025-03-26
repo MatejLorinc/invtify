@@ -5,7 +5,6 @@ import {formatCurrency} from "@/app/helpers/format";
 import Image from "next/image";
 import {AiOutlineStock} from "react-icons/ai";
 import {HiOutlineCash} from "react-icons/hi";
-import {RiHourglassFill} from "react-icons/ri";
 import {EditBroker} from "@/app/(app)/components/broker/edit-broker";
 
 export function BrokerUsedBalance({totalBalance, investedBalance}: { totalBalance: number, investedBalance: number }) {
@@ -34,7 +33,7 @@ function BrokerBalanceComponent({header, info, icon}: { header: string, info: st
 export function BrokerAvailableBalance({availableBalance, reservesLifetime}: { availableBalance: number, reservesLifetime: string }) {
     return <div className="flex flex-wrap bg-black/5">
         <BrokerAvailableBalanceComponent header="Available Balance" info={formatCurrency(availableBalance)} icon={<HiOutlineCash size="2rem"/>}/>
-        <BrokerAvailableBalanceComponent header="Runs Out In" info={reservesLifetime} icon={<RiHourglassFill size="2rem"/>}/>
+        {/*<BrokerAvailableBalanceComponent header="Runs Out In" info={reservesLifetime} icon={<RiHourglassFill size="2rem"/>}/>*/}
     </div>
 }
 
