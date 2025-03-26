@@ -1,4 +1,5 @@
 import DynamicText from "@/app/frontpage/dynamic-text";
+import Image from "next/image";
 
 export default function Hero() {
     return (
@@ -68,10 +69,8 @@ export default function Hero() {
             </div>
 
             <div className="flex justify-center">
-                <div className="rounded-2xl overflow-hidden shadow-2xl aspect-video">
-                    <div className="bg-gray-300" style={{width: "1280px", height: "720px"}}>
-                        {/*TODO: Replace with animation from application*/}
-                    </div>
+                <div className="rounded-2xl overflow-hidden shadow-2xl aspect-video bg-background-default">
+                    <Image src={"/assets/preview.png"} alt={"preview"} width={1280} height={720}/>
                 </div>
             </div>
         </div>
