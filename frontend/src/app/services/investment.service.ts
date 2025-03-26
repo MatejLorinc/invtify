@@ -3,6 +3,7 @@ import {deleteExternalApiWithAuth, getExternalApiWithAuth, postExternalApiWithAu
 import InvestmentStrategy from "@/app/models/investment/investment-strategy";
 import InvestmentFrequency, {FrequencyType} from "@/app/models/investment/investment-frequency";
 import InvestmentBroker from "@/app/models/broker/investment-broker";
+import {isoToDate} from "@/app/helpers/format";
 
 export async function deleteInvestment(accessToken: string, investmentId: number) {
     await deleteExternalApiWithAuth("api/user/investments", accessToken, {investmentId: investmentId});
@@ -34,7 +35,13 @@ export async function getInvestments(accessToken: string) {
                 investmentData.totallyInvested,
                 investmentData.rateOfReturn,
                 investmentData.profitLoss,
-                investmentData.investmentDatetimeValues,
+                investmentData.investmentDatetimeValues.map(dto => {
+                        return {
+                            value: dto.value,
+                            date: isoToDate(dto.datetime),
+                        }
+                    }
+                ),
             );
         }
     );

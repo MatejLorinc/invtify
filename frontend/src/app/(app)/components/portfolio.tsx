@@ -50,7 +50,7 @@ export default function Portfolio({accessToken, totalCash}: { accessToken: strin
             <PortfolioInfoComponent title={activeTimeframe.displayName + " Return"} value={formatPercentage(portfolio.totalReturnPercentage)}
                                     additionalValue={formatCurrency(portfolio.totalReturn)}/>
         </div>
-        <PortfolioChart/>
+        <PortfolioChart dataDto={portfolio.investmentDatetimeValues}/>
         <div className="bg-background-default">
             <div className="flex justify-evenly py-2 px-4">
                 {PortfolioTimeframe.getValues().map((timeframe, index) => <TimeframeButton key={index}

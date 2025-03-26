@@ -15,7 +15,7 @@ export class InvestmentModel {
         public totallyInvested: number,
         public rateOfReturn: number,
         public profitLoss: number,
-        public investmentDatetimeValues: [InvestmentDatetimeValueDto]
+        public investmentDatetimeValues: InvestmentDatetimeValue[]
     ) {
     }
 
@@ -94,4 +94,9 @@ export interface CreateInvestmentStrategyDto {
 export interface InvestmentDatetimeValueDto {
     value: number,
     datetime: string
+}
+
+export interface InvestmentDatetimeValue {
+    value: number,
+    date: Date
 }

@@ -1,8 +1,7 @@
 import {ReactElement, useCallback, useRef, useState} from "react";
 import * as d3 from "d3";
 import {formatCurrency, formatDate} from "@/app/helpers/format";
-
-export type DataEntry = { date: Date, value: number };
+import {InvestmentDatetimeValue} from "@/app/models/investment/investment";
 
 export function LineChart({
                               data,
@@ -16,7 +15,7 @@ export function LineChart({
                               lineColor,
                               areaExtra
                           }: {
-    data: DataEntry[]
+    data: InvestmentDatetimeValue[]
     width: number
     height: number
     marginTop: number
@@ -33,7 +32,7 @@ export function LineChart({
     const [tooltipDate, setTooltipDate] = useState(new Date());
     const [tooltipValue, setTooltipValue] = useState(0);
 
-    const bisect = d3.bisector((d: DataEntry) => d.date).center;
+    const bisect = d3.bisector((d: InvestmentDatetimeValue) => d.date).center;
 
     let dataAsXYArray: [number, number][] = data.map(d => [d.date.getTime(), d.value]);
 

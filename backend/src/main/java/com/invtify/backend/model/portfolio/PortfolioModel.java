@@ -41,17 +41,42 @@ public class PortfolioModel {
     }
 
     private static List<InvestmentDatetimeValueDto> sumInvestments(Collection<InvestmentModel> investments) {
-        Map<Timestamp, Float> summedValues = new HashMap<>();
+        List<Map.Entry<Timestamp, Float>> sortedEntries = new ArrayList<>();
 
+        // Collect all values
         for (InvestmentModel investment : investments) {
             for (InvestmentDatetimeValueDto dto : investment.getInvestmentDatetimeValues()) {
-                summedValues.merge(dto.datetime(), dto.value(), Float::sum);
+                sortedEntries.add(Map.entry(dto.datetime(), dto.value()));
             }
         }
 
-        return summedValues.entrySet().stream()
-                .map(entry -> new InvestmentDatetimeValueDto(entry.getValue(), entry.getKey()))
-                .sorted(Comparator.comparing(InvestmentDatetimeValueDto::datetime))
-                .toList();
+        // Sort by timestamp
+        sortedEntries.sort(Comparator.comparing(Map.Entry::getKey));
+
+        List<InvestmentDatetimeValueDto> mergedList = new ArrayList<>();
+        Timestamp currentTimestamp = null;
+        float sum = 0;
+
+        for (Map.Entry<Timestamp, Float> entry : sortedEntries) {
+            if (currentTimestamp == null || entry.getKey().getTime() - currentTimestamp.getTime() > 3000) {
+                // Save previous sum before moving to a new time window
+                if (currentTimestamp != null) {
+                    mergedList.add(new InvestmentDatetimeValueDto(sum, currentTimestamp));
+                }
+                // Reset
+                currentTimestamp = entry.getKey();
+                sum = entry.getValue();
+            } else {
+                // Merge within 3 seconds
+                sum += entry.getValue();
+            }
+        }
+
+        // Add the last accumulated sum
+        if (currentTimestamp != null) {
+            mergedList.add(new InvestmentDatetimeValueDto(sum, currentTimestamp));
+        }
+
+        return mergedList;
     }
 }

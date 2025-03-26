@@ -21,3 +21,8 @@ export function formatDate(date: Date) {
         timeZone: "CET"
     });
 }
+
+export function isoToDate(dateString: string) {
+    const formattedDateString = dateString.replace(/(\+\d{2}):(\d{2})/, "$1$2"); // Convert "+00:00" to "+0000"
+    return new Date(formattedDateString);
+}
