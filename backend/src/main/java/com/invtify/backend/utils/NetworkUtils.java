@@ -15,19 +15,36 @@ public class NetworkUtils {
     }
 
     public static <T> T getHttpRequest(String host, String pathname, String authorizationToken, TypeReference<T> typeReference) {
-        try {
-            HttpClient httpClient = HttpClient.newBuilder().build();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .uri(URI.create(host + pathname))
-                    .header("Authorization", authorizationToken)
-                    .build();
+        HttpClient httpClient = HttpClient.newBuilder().build();
+        ObjectMapper objectMapper = new ObjectMapper();
+        int maxRetries = 5;
+        int retryDelayMs = 3000;
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .GET()
+                        .uri(URI.create(host + pathname))
+                        .header("Authorization", authorizationToken)
+                        .build();
 
-            return new ObjectMapper().readValue(response.body(), typeReference);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 429) {
+                    if (attempt < maxRetries) {
+                        System.out.println("Received 429 Too Many Requests. Retrying in " + (retryDelayMs / 1000) + " seconds...");
+                        Thread.sleep(retryDelayMs);
+                        continue;
+                    } else {
+                        System.err.println("Max retry attempts reached. Request failed due to 429 Too Many Requests.");
+                        return null;
+                    }
+                }
+
+                return objectMapper.readValue(response.body(), typeReference);
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
