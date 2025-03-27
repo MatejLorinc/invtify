@@ -52,14 +52,16 @@ public enum PortfolioTimeframe {
         }
     };
 
-    private static List<InvestmentDatetimeValueDto> reduceList(List<InvestmentDatetimeValueDto> list) {
+    public static List<InvestmentDatetimeValueDto> reduceList(List<InvestmentDatetimeValueDto> list) {
         if (list == null || list.isEmpty()) return List.of();
-        if (list.size() <= 50) return list;
 
         // Sort the list by datetime in ascending order.
         List<InvestmentDatetimeValueDto> sortedList = list.stream()
                 .sorted(Comparator.comparing(dto -> dto.datetime().toInstant()))
                 .collect(Collectors.toList());
+
+        if (list.size() <= 50) return sortedList;
+
         List<InvestmentDatetimeValueDto> result = new ArrayList<>();
         int total = sortedList.size();
 
@@ -76,7 +78,7 @@ public enum PortfolioTimeframe {
     protected TimeframeResult calculateReturnForPeriod(List<InvestmentDatetimeValueDto> values, float currentValue, Duration period) {
         Instant now = Instant.now();
         Instant lowerBound = now.minus(period);
-        
+
         List<InvestmentDatetimeValueDto> processedValues = reduceList(values.stream()
                 .filter(dto -> !dto.datetime().toInstant().isBefore(lowerBound))
                 .toList());

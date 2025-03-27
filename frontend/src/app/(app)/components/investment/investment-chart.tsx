@@ -1,10 +1,11 @@
 "use client"
 
 import {useEffect, useRef, useState} from "react";
-import {DataEntry, LineChart} from "@/app/(app)/components/chart";
+import {LineChart} from "@/app/(app)/components/chart";
 import * as d3 from "d3";
+import {InvestmentDatetimeValue} from "@/app/models/investment/investment";
 
-export default function InvestmentChart({id, data}: { id: number, data: DataEntry[] }) {
+export default function InvestmentChart({id, data}: { id: number, data: InvestmentDatetimeValue[] }) {
     const chartContainer = useRef(null);
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
