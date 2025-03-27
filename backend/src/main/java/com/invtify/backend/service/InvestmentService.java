@@ -94,6 +94,7 @@ public class InvestmentService {
         User user = userService.getUser(userId);
         InvestmentStrategy investmentStrategy = createStrategyFromCreateDto(createInvestmentStrategyDto);
         createInvestment(user, investmentStrategy);
+        cache.get(userId).invalidate();
     }
 
     private InvestmentStrategy createStrategyFromCreateDto(CreateInvestmentStrategyDto createDto) {
@@ -122,6 +123,7 @@ public class InvestmentService {
         investment.setAmount(investmentStrategy.getAmount());
         investment.setCreatedAt(investmentStrategy.getCreatedAt());
         investmentRepository.save(investment);
+        cache.get(user.getId()).invalidate();
     }
 
 
@@ -132,6 +134,7 @@ public class InvestmentService {
             return false;
         }
         investmentRepository.deleteById(investmentId);
+        cache.get(userId).invalidate();
         return true;
     }
 }

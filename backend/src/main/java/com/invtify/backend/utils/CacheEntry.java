@@ -10,6 +10,7 @@ public class CacheEntry<T> {
     private final T data;
     private final Instant timestamp;
     private final Duration expiration;
+    private boolean invalidated = false;
 
     public CacheEntry(T data, Duration expiration) {
         this.data = data;
@@ -18,6 +19,10 @@ public class CacheEntry<T> {
     }
 
     public boolean isExpired() {
-        return Instant.now().isAfter(timestamp.plus(expiration));
+        return Instant.now().isAfter(timestamp.plus(expiration)) || invalidated;
+    }
+
+    public void invalidate() {
+        invalidated = true;
     }
 }
