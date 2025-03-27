@@ -47,8 +47,8 @@ export default function Portfolio({accessToken, totalCash}: { accessToken: strin
                                     additionalValue={"Cash: " + formatCurrency(totalCash)}/>
             <PortfolioInfoComponent title="Total Return" value={formatPercentage(portfolio.totalReturnPercentage)}
                                     additionalValue={formatCurrency(portfolio.totalReturn)}/>
-            <PortfolioInfoComponent title={activeTimeframe.displayName + " Return"} value={formatPercentage(portfolio.totalReturnPercentage)}
-                                    additionalValue={formatCurrency(portfolio.totalReturn)}/>
+            <PortfolioInfoComponent title={activeTimeframe.displayName + " Return"} value={formatPercentage(portfolio.timeframeReturnPercentage)}
+                                    additionalValue={formatCurrency(portfolio.timeframeReturn)}/>
         </div>
         <PortfolioChart dataDto={portfolio.investmentDatetimeValues}/>
         <div className="bg-background-default">

@@ -74,12 +74,15 @@ public enum PortfolioTimeframe {
     public abstract TimeframeResult calculateTimeframeReturn(List<InvestmentDatetimeValueDto> values, float currentValue);
 
     protected TimeframeResult calculateReturnForPeriod(List<InvestmentDatetimeValueDto> values, float currentValue, Duration period) {
-        List<InvestmentDatetimeValueDto> processedValues = reduceList(values);
+        Instant now = Instant.now();
+        Instant lowerBound = now.minus(period);
+        
+        List<InvestmentDatetimeValueDto> processedValues = reduceList(values.stream()
+                .filter(dto -> !dto.datetime().toInstant().isBefore(lowerBound))
+                .toList());
         if (processedValues.isEmpty()) {
             return new TimeframeResult(0, 0, processedValues);
         }
-        Instant now = Instant.now();
-        Instant lowerBound = now.minus(period);
 
         // Find the earliest record on or after the lower bound.
         InvestmentDatetimeValueDto startDto = processedValues.stream()
