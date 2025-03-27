@@ -50,7 +50,7 @@ public class Investment {
     @Column(nullable = false)
     private float totallyInvested = 0;
 
-    @OneToMany(mappedBy = "investment")
+    @OneToMany(mappedBy = "investment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvestmentDatetimeValue> datetimeValues = new ArrayList<>();
 
     @Override
