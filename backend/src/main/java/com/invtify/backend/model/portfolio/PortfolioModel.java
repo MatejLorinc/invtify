@@ -58,7 +58,7 @@ public class PortfolioModel {
         float sum = 0;
 
         for (Map.Entry<Timestamp, Float> entry : sortedEntries) {
-            if (currentTimestamp == null || entry.getKey().getTime() - currentTimestamp.getTime() > 3000) {
+            if (currentTimestamp == null || Math.abs(entry.getKey().getTime() - currentTimestamp.getTime()) > 3000) {
                 // Save previous sum before moving to a new time window
                 if (currentTimestamp != null) {
                     mergedList.add(new InvestmentDatetimeValueDto(sum, currentTimestamp));
@@ -68,6 +68,7 @@ public class PortfolioModel {
                 sum = entry.getValue();
             } else {
                 // Merge within 3 seconds
+                currentTimestamp = entry.getKey();
                 sum += entry.getValue();
             }
         }
