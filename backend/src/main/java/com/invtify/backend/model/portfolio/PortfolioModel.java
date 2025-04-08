@@ -70,6 +70,7 @@ public class PortfolioModel {
                 // Merge within 3 seconds
                 currentTimestamp = entry.getKey();
                 sum += entry.getValue();
+                mergedList.remove(mergedList.size() - 1);
             }
         }
 
